@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Navbar from '../nav/navbar'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
+import Catalog from '../catalog/catalog'
 import './main_styles.scss'
 
 interface State {
@@ -72,13 +73,15 @@ export default class Main extends Component <any, State> {
                 <div className="topdiv">
                 <Featured live={live} selected={selected} />
             <div className="parent">
-            <div className="container">
+            <div className="container main-cont">
+                <h2>Active Streams</h2>
                 <div className="active-cards">
                 {this.renderStreams()}
                 </div>
             </div>
             </div>
         </div>
+        <Catalog />
         <VideoPlayer selected={selected} live={live} removeStream={this.removeStream} />
         </div>
         )
@@ -100,7 +103,7 @@ export default class Main extends Component <any, State> {
     }
     renderStreams(): any {
         const { live, expand } = this.state
-        return (Object as any).values(live).map(({ title, thumbnails, description, channelId }: LiveStreams, index: number) => {
+        return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers }: LiveStreams, index: number) => {
             const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
             return (
                 <div className="card" key={index} style={expand === channelId ? {height: "calc(100%)"} : {}}>
@@ -109,6 +112,7 @@ export default class Main extends Component <any, State> {
                     </div>
                     <div className="details">
                         <h3>{title}</h3>
+                        <span style={{marginLeft: 'auto', marginRight: 'auto'}}>{viewers + " viewers"}</span>
                         <p className="description" style={expand === channelId ? {height: "100%", overflow: "hidden"} : {height: "100px", overflow: "hidden"}}>
                         {description}
                         </p>
