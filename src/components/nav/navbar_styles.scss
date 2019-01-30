@@ -1,0 +1,15 @@
+nav {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 55px;
+    background-color: #25252E;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    z-index: 2;
+
+    h2 {
+        margin: auto 0 auto 15px;
+    }
+}

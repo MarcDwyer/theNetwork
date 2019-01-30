@@ -1,0 +1,9 @@
+all: build test
+
+build:
+	go build -v ./...
+
+test: build
+	go test -v ./...
+
+.PHONY: build test

@@ -1,0 +1,49 @@
+.parent-video {
+    position: fixed;
+    background-color: black;
+    z-index: 1000;
+    transition: all 0.5s ease-in;
+    display: flex;
+    overflow: hidden !important;
+
+    .video {    
+        order: 0;
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        .thebutton {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            margin: 0 auto 15px 15px;
+            padding: 10px 10px;
+            cursor: pointer;
+            background-color: #f44336;
+            color: #eee;
+            width: 85px;
+
+        }  
+        iframe {
+            margin-top: auto;
+            margin-bottom: auto;
+            width: 100%;
+            height: 90%;
+        }
+    }
+    .chat {
+        order: 1;
+        width: 20%;
+
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Cg7/HJQxWq9AWi8VEkPXSpFWqSo=",
+			"path": "github.com/joho/godotenv",
+			"revision": "69ed1d913aa885da390dd6de9febf063d101b097",
+			"revisionTime": "2018-11-20T19:47:48Z"
+		},
+		{
+			"checksumSHA1": "CnRAzS/C5QU6yoq2L0IgnLt4lyo=",
+			"path": "github.com/matttproud/fisheryates",
+			"revision": "50bc1a75a92d92f0c7f94ab9ebb8d51db72b9b5f",
+			"revisionTime": "2018-11-27T06:30:54Z"
+		}
+	],
+	"rootPath": "github.com/marcdwyer/super-secret/backend"
+}
