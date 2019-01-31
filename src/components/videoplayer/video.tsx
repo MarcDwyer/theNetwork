@@ -7,10 +7,18 @@ interface Props {
     live: LSObj | null;
     removeStream: Function;
 }
-
 export default class VideoPlayer extends Component <Props, {}> {
+    private getOut: any
+    constructor(props: any) {
+        super(props)
+        this.getOut = document.addEventListener(('keydown'), (e) => {
+            this.props.removeStream()
+        })
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.getOut);
+    }
     render() {
-        console.log(this.props)
         const { removeStream, live, selected } = this.props
         if (!selected || !live) {
             return (
@@ -28,9 +36,10 @@ export default class VideoPlayer extends Component <Props, {}> {
         return (
             <div className="parent-video" style={{width: "100%", height: "100%", bottom: '0'}}>
                 <div className="video">
-                <button className="thebutton"
+                <button className="video-button"
                 onClick={() => removeStream()}
                 >Exit</button>
+                <span>{stream.viewers + " viewers"}</span>
                 <iframe src={vidUrl} frameBorder="0" />
                 </div>
                 <div className="chat">

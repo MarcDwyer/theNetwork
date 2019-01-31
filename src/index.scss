@@ -1,3 +1,5 @@
+$color: #BE8AC7;
+
 body {
   margin: 0;
   padding: 0;
@@ -33,3 +35,17 @@ code {
     width: 75%;
   }
 }
+
+.thebutton {
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  margin: 0 auto 15px 15px;
+  padding: 15px 15px;
+  cursor: pointer;
+  background-color: $color;
+  color: #eee;
+  width: 85px;
+  height: 100%;
+}  

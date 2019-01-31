@@ -14,7 +14,7 @@
         flex-direction: column;
         position: relative;
 
-        .thebutton {
+        .video-button {
             position: absolute;
             top: 5px;
             left: 5px;
@@ -30,6 +30,12 @@
             width: 85px;
 
         }  
+        span {
+            position: absolute;
+            top: 5px;
+            left:50%;
+            margin-left:-20px;
+        }
         iframe {
             margin-top: auto;
             margin-bottom: auto;

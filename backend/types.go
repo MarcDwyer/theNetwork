@@ -3,9 +3,9 @@ package main
 import "time"
 
 type Streamer struct {
-	Name      string
-	ChannelId string
-	ImageID   string
+	Name      string `json:"name"`
+	ChannelId string `json:"channelId"`
+	ImageID   string `json:"imageId"`
 }
 type Islive struct {
 	Kind       string `json:"kind,omitemptys"`

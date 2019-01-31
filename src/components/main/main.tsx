@@ -8,7 +8,6 @@ import './main_styles.scss'
 interface State {
     live: null | LSObj;
     error: string | null;
-    expand: string;
     selected: string | null;
 }
 
@@ -46,7 +45,6 @@ export default class Main extends Component <any, State> {
     state: State = {
         live: null,
         error: null,
-        expand: "",
         selected: null
     }
      componentDidMount() {
@@ -55,7 +53,7 @@ export default class Main extends Component <any, State> {
         setInterval(this.getStreams, 45000)
     }
     render() {
-        const { live, selected, expand } = this.state
+        const { live, selected } = this.state
         if (!live) {
             return (
                 <div className="parent">
@@ -71,7 +69,7 @@ export default class Main extends Component <any, State> {
             <div>
                 <Navbar />
                 <div className="topdiv">
-                <Featured live={live} selected={selected} />
+                <Featured live={live} selected={selected} setSelect={this.setSelect} />
             <div className="parent">
             <div className="container main-cont">
                 <h2>Active Streams</h2>
@@ -102,34 +100,28 @@ export default class Main extends Component <any, State> {
         }
     }
     renderStreams(): any {
-        const { live, expand } = this.state
+        const { live } = this.state
         return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers }: LiveStreams, index: number) => {
             const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
+            const newTitle = title.slice(0, 44)
             return (
-                <div className="card" key={index} style={expand === channelId ? {height: "calc(100%)"} : {}}>
+                <div className="card" key={index}>
                     <div className="image">
                         <img src={newthumb} alt="thumbnail"/>
                     </div>
                     <div className="details">
-                        <h3>{title}</h3>
-                        <span style={{marginLeft: 'auto', marginRight: 'auto'}}>{viewers + " viewers"}</span>
-                        <p className="description" style={expand === channelId ? {height: "100%", overflow: "hidden"} : {height: "100px", overflow: "hidden"}}>
+                    <div className="content">
+                        <h3>{newTitle}</h3>
+                        <span><i style={{color: "red"}} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
+                        <p className="description">
                         {description}
                         </p>
+                        </div>
                         <div className="buttons">
                         <button
                         className="thebutton"
                         onClick={() => this.setState({selected: channelId})}
                         >Watch</button>
-                        <span style={{margin: "10px 10px 10px auto"}}
-                        onClick={(e) => {
-                            if (expand !== channelId) {
-                                this.setState({expand: channelId})
-                            } else {
-                                this.setState({expand: ""})
-                            }
-                        }}
-                        >{expand === channelId ? "Show Less" : "Show More"}</span>
                         </div>
                     </div>
                 </div>
@@ -137,7 +129,9 @@ export default class Main extends Component <any, State> {
         })
     }
     removeStream = () => {
-        console.log('baller')
         this.setState({selected: null})
+    }
+    setSelect = (id: string) => {
+        this.setState({selected: id})
     }
 }

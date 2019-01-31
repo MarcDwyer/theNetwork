@@ -1,0 +1,43 @@
+
+$color: #BE8AC7;
+
+.cata-container {
+    border-top: 1px solid #737376;
+    margin-bottom: 50px;
+}
+.cata-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 20px;
+
+    .cata-card {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        height: 250px;
+        max-width: 375px;
+        margin-top: 75px;
+        border-radius: 10px;
+        background-color: #25252E;
+        
+        & * {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        img {
+            border-radius: 50%;
+            width: 85px;
+            height: 85px;
+        }
+        .social-buttons {
+            margin-top: auto;
+            margin-bottom: 10px;
+            a {
+                font-size: 28px;
+                color: $color;
+                text-decoration: none;
+            }
+        }
+    }
+}
