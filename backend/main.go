@@ -68,7 +68,7 @@ func main() {
 	go getter()
 
 	go func() {
-		pollInterval := 35
+		pollInterval := 5
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
