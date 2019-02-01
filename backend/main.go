@@ -68,7 +68,7 @@ func main() {
 	go getter()
 
 	go func() {
-		pollInterval := 5
+		pollInterval := 1
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
@@ -92,6 +92,8 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
+
+var numb int
 
 func getter() {
 	fmt.Println("getting....")
@@ -156,8 +158,24 @@ func getter() {
 				VideoID:     live.Items[0].ID,
 				Thumbnail:   live.Items[0].Snippet.Thumbnails,
 			}
+			if numb == 1 {
+				tester := Newlive{
+					Name:        "test",
+					ImageID:     v.ImageID,
+					ChannelID:   "sasdqawdqwd123123131",
+					Title:       "test",
+					Description: "test",
+					Viewers:     1337,
+					Likes:       "1337",
+					Dislikes:    "0",
+					VideoID:     "test",
+					Thumbnail:   live.Items[0].Snippet.Thumbnails,
+				}
+				*final = append(*final, tester)
+			}
 			*final = append(*final, rz)
 		}
+		numb++
 		resp = *final
 		sort.Sort(ByViewers(resp))
 	}()

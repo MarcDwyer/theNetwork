@@ -1,21 +1,55 @@
-.notification {
-    background-image: linear-gradient(45deg, #3023AE 0%, #FF0099 100%);
-    height: 155px;
-    width: 325px;
+
+.parent-notif {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
     position: fixed;
     left: -325px;
-    bottom: 55px;
-    border-radius: 10px;
-    opacity: .90;
-    transition: 0.5s ease;
-    z-index: 1001;
+    bottom: 35px;
+    transition: .5s ease;
+
+    .notification {
+        background-image: linear-gradient(45deg, #3023AE 0%, #FF0099 100%);
+        min-height: 155px;
+        width: 325px;
+        border-radius: 10px;
+        opacity: .90;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
 }
 
 .prompt {
-    display: flex;
     left: 55px;
     text-align: center;
 
+    .clear {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        margin-left: -20px;
+        cursor: pointer;
+    }
+    .islive {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+
+        span {
+            border: solid 1px red;
+        }
+        .watch-now {
+            background-color: #D6D6D6;
+            width: 85px;
+            height: 45px;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px 5px;
+            border: none;
+        }
+    }
     span {
         margin: auto;
     }

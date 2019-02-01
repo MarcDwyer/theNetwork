@@ -51,7 +51,7 @@ export default class Main extends Component <any, State> {
      componentDidMount() {
         this.getStreams()
 
-        setInterval(this.getStreams, 45000)
+        setInterval(this.getStreams, 25000)
     }
     render() {
         const { live, selected } = this.state

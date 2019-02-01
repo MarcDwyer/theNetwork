@@ -20,13 +20,15 @@ export default class Notifications extends Component <Props, State> {
         difference: []
     }
     componentDidMount() {
+        const confirmed = localStorage.getItem("isClear") || null
+        if (confirmed) return
         setTimeout(() => {
             this.setState({loaded: true})
       }, 500)
    }
    componentDidUpdate(prevProps: Props) {
        const { times, loaded } = this.state
-       
+       console.log(this.props.live)
        if (loaded) {
             setTimeout(() => {
                 this.setState({loaded: false})
@@ -34,7 +36,7 @@ export default class Notifications extends Component <Props, State> {
        }
        if (prevProps.live !== this.props.live) {
             this.setState({times: times + 1})
-            if (times > 1) {
+            if (times >= 1) {
                 const oldNames: Checker[] = Object.values(prevProps.live).map(stream => {
                     return {name: stream.name, channelId: stream.channelId}
                 })
@@ -45,50 +47,65 @@ export default class Notifications extends Component <Props, State> {
                 const diff = this.difference(newNames, oldNames)
                 console.log(diff)
                 if (diff.length > 0) {
-                    return this.setState({difference: diff})
-                } else {
-                    return
+                 this.setState({difference: diff})
                 }
             }
        }
    }
     render() {
-        const { times, loaded, difference } = this.state
+        const { loaded, difference } = this.state
+        console.log(difference.length)
         if (loaded) {
             return (
-                <div className="notification prompt"
+                <div className="parent-notif prompt">
+                <div className="notification"
                 >
                 <span>I will notify you when streamers go live!</span>
+                <span className="clear"
+                onClick={(e) => {
+                    localStorage.setItem("isClear", JSON.stringify(true))
+                }}
+                >OK</span>
+                </div>
                 </div>
             )
         } else if (!loaded && difference.length > 0) {
-            <div className="notification prompt"
-            >
-            {(() => {
-                return difference.map(({name, channelId}) => {
-                    return (
-                        <div className="islive">
-                        <span>{name} is live!</span>
-                        <button
-                        onClick={() => {
-                            console.log(channelId)
-                        }}
-                        >Watch now</button>
-                        </div>
-                    )
-                })
-            })()}
-            </div>
+            setTimeout(() => {
+               this.setState({difference: []})
+            }, 4000)
+            return (
+                <div className="parent-notif prompt">
+                {(() => {
+                    return difference.map(({name, channelId}) => {
+                        return (
+                            <div className="notification">
+                            <div className="islive">
+                            <span>{name} is live!</span>
+                            <button
+                            className="watch-now"
+                            onClick={() => {
+                                console.log(channelId)
+                            }}
+                            >Watch now</button>
+                            </div>
+                            </div>
+                        )
+                    })
+                })()}
+                </div>
+            )
         }
         return (
+            <div className="parent-notif">
             <div className="notification"
             >
+            </div>
             </div>
         )
     }
     difference(newNames: Checker[], old: Checker[]): Checker[] {
         let ch: Checker[] = []
-        console.log('is this even running')
+        console.log('diff is running')
         for (let x = 0; x < newNames.length; x++) {
             let match: boolean = false
             for (let i = 0; i < old.length; i++) {
