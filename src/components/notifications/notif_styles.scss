@@ -14,4 +14,9 @@
 .prompt {
     display: flex;
     left: 55px;
+    text-align: center;
+
+    span {
+        margin: auto;
+    }
 }
