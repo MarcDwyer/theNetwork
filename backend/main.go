@@ -28,8 +28,8 @@ var streamers = []Streamer{
 	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews"},
 	{Name: "SJC", ChannelId: "UC4YYNTbzt3X1uxdTCJaYWdg", ImageID: "sjc"},
 	{Name: "Mexican Andy", ChannelId: "UC8EmlqXIlJJpF7dTOmSywBg", ImageID: "mexican"},
-	{Name: "Chilledcow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: ""},
-	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: ""},
+	{Name: "Chilledcow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: "chilled"},
+	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
 }
 var resp []Newlive
 

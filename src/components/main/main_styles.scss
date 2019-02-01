@@ -18,7 +18,7 @@
         flex-direction: column;
         margin-bottom: 25px;
         max-width: 525px;
-        height: 600px;
+        height: 650px;
         border-radius: 10px;    
         background-color: #25252E;
 
@@ -38,6 +38,15 @@
             .content {
                 display: flex;
                 flex-direction: column;
+                margin-top: -50px;
+
+                img {
+                    margin-left: 10px;
+                    border: solid 1px #25252E;
+                    height: 85px;
+                    width: 85px;
+                    border-radius: 50%;
+                }
 
                 span {
                     margin-left: auto;

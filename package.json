@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/jest": "23.3.13",
+    "@types/lodash": "^4.14.120",
     "@types/node": "10.12.18",
     "@types/react": "16.7.21",
     "@types/react-dom": "16.0.11",

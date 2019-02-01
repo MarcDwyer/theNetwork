@@ -3,6 +3,7 @@ import Navbar from '../nav/navbar'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
 import Catalog from '../catalog/catalog'
+import Notifications from '../notifications/notif'
 import './main_styles.scss'
 
 interface State {
@@ -81,6 +82,7 @@ export default class Main extends Component <any, State> {
         </div>
         <Catalog />
         <VideoPlayer selected={selected} live={live} removeStream={this.removeStream} />
+        <Notifications live={live} />
         </div>
         )
     }
@@ -101,9 +103,10 @@ export default class Main extends Component <any, State> {
     }
     renderStreams(): any {
         const { live } = this.state
-        return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers }: LiveStreams, index: number) => {
+        return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers, imageId }: LiveStreams, index: number) => {
             const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
             const newTitle = title.slice(0, 44)
+            const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
             return (
                 <div className="card" key={index}>
                     <div className="image">
@@ -111,6 +114,7 @@ export default class Main extends Component <any, State> {
                     </div>
                     <div className="details">
                     <div className="content">
+                    <img src={image} alt="streamer"/>
                         <h3>{newTitle}</h3>
                         <span><i style={{color: "red"}} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
                         <p className="description">
