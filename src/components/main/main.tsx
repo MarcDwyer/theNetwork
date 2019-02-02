@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import Navbar from '../nav/navbar'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
-import Catalog from '../catalog/catalog'
 import Notifications from '../notifications/notif'
 import './main_styles.scss'
 
@@ -68,7 +66,6 @@ export default class Main extends Component <any, State> {
         }
         return (
             <div>
-                <Navbar />
                 <div className="topdiv">
                 <Featured live={live} selected={selected} setSelect={this.setSelect} />
             <div className="parent">
@@ -80,7 +77,6 @@ export default class Main extends Component <any, State> {
             </div>
             </div>
         </div>
-        <Catalog />
         <VideoPlayer selected={selected} live={live} removeStream={this.removeStream} />
         <Notifications live={live} select={this.setSelect} />
         </div>

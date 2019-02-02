@@ -11,7 +11,7 @@
 
     .notification {
         background-image: linear-gradient(45deg, #3023AE 0%, #FF0099 100%);
-        min-height: 155px;
+        height: 155px;
         width: 325px;
         border-radius: 10px;
         opacity: .90;
@@ -33,7 +33,8 @@
         cursor: pointer;
     }
     .islive {
-        margin: auto;
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
 
@@ -42,9 +43,9 @@
         }
         .watch-now {
             background-color: #D6D6D6;
-            margin-top: auto;
             width: 85px;
             height: 35px;
+            margin: auto;
             text-align: center;
             border-radius: 5px;
             padding: 5px 5px;

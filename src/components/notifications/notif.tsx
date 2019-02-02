@@ -7,7 +7,6 @@ interface Props{
 }
 interface State {
     loaded: boolean;
-    times: number;
     difference: Checker[];
 }
 interface Checker {
@@ -17,7 +16,6 @@ interface Checker {
 export default class Notifications extends Component <Props, State> {
     state: State = {
         loaded: false,
-        times: 0,
         difference: []
     }
     componentDidMount() {
@@ -28,7 +26,7 @@ export default class Notifications extends Component <Props, State> {
       }, 500)
    }
    componentDidUpdate(prevProps: Props) {
-       const { times, loaded } = this.state
+       const { loaded } = this.state
        console.log(this.props.live)
        if (loaded) {
             setTimeout(() => {
@@ -36,8 +34,7 @@ export default class Notifications extends Component <Props, State> {
             }, 3000)
        }
        if (prevProps.live !== this.props.live) {
-            this.setState({times: times + 1})
-            if (times >= 1) {
+           console.log('this conditional ran...')
                 const oldNames: Checker[] = Object.values(prevProps.live).map(stream => {
                     return {name: stream.name, channelId: stream.channelId}
                 })
@@ -50,7 +47,6 @@ export default class Notifications extends Component <Props, State> {
                 if (diff.length > 0) {
                  this.setState({difference: diff})
                 }
-            }
        }
    }
     render() {
@@ -70,9 +66,9 @@ export default class Notifications extends Component <Props, State> {
                 </div>
             )
         } else if (!loaded && difference.length > 0) {
-            setTimeout(() => {
+           setTimeout(() => {
                this.setState({difference: []})
-            }, 6500)
+            }, 5500)
             return (
                 <div className="parent-notif prompt">
                 {(() => {
