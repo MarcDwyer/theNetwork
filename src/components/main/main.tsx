@@ -82,7 +82,7 @@ export default class Main extends Component <any, State> {
         </div>
         <Catalog />
         <VideoPlayer selected={selected} live={live} removeStream={this.removeStream} />
-        <Notifications live={live} />
+        <Notifications live={live} select={this.setSelect} />
         </div>
         )
     }

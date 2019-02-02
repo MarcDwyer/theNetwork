@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { LSObj } from '../main/main'
 import './notif_styles.scss'
 interface Props{
-    live: LSObj
+    live: LSObj;
+    select: Function;
 }
 interface State {
     loaded: boolean;
@@ -54,7 +55,6 @@ export default class Notifications extends Component <Props, State> {
    }
     render() {
         const { loaded, difference } = this.state
-        console.log(difference.length)
         if (loaded) {
             return (
                 <div className="parent-notif prompt">
@@ -72,7 +72,7 @@ export default class Notifications extends Component <Props, State> {
         } else if (!loaded && difference.length > 0) {
             setTimeout(() => {
                this.setState({difference: []})
-            }, 4000)
+            }, 6500)
             return (
                 <div className="parent-notif prompt">
                 {(() => {
@@ -84,7 +84,7 @@ export default class Notifications extends Component <Props, State> {
                             <button
                             className="watch-now"
                             onClick={() => {
-                                console.log(channelId)
+                                this.props.select(channelId)
                             }}
                             >Watch now</button>
                             </div>
