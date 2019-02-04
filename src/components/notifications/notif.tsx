@@ -27,14 +27,12 @@ export default class Notifications extends Component <Props, State> {
    }
    componentDidUpdate(prevProps: Props) {
        const { loaded } = this.state
-       console.log(this.props.live)
        if (loaded) {
             setTimeout(() => {
                 this.setState({loaded: false})
             }, 3000)
        }
        if (prevProps.live !== this.props.live) {
-           console.log('this conditional ran...')
                 const oldNames: Checker[] = Object.values(prevProps.live).map(stream => {
                     return {name: stream.name, channelId: stream.channelId}
                 })
@@ -51,6 +49,7 @@ export default class Notifications extends Component <Props, State> {
    }
     render() {
         const { loaded, difference } = this.state
+        if (window.innerWidth < 1000) return null
         if (loaded) {
             return (
                 <div className="parent-notif prompt">
@@ -68,7 +67,7 @@ export default class Notifications extends Component <Props, State> {
         } else if (!loaded && difference.length > 0) {
            setTimeout(() => {
                this.setState({difference: []})
-            }, 5500)
+            }, 9000)
             return (
                 <div className="parent-notif prompt">
                 {(() => {
@@ -81,6 +80,7 @@ export default class Notifications extends Component <Props, State> {
                             className="watch-now"
                             onClick={() => {
                                 this.props.select(channelId)
+                                this.setState({difference: []})
                             }}
                             >Watch now</button>
                             </div>

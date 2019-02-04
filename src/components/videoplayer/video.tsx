@@ -12,6 +12,7 @@ export default class VideoPlayer extends Component <Props, {}> {
     constructor(props: any) {
         super(props)
         this.getOut = document.addEventListener(('keydown'), (e) => {
+            if (e.keyCode !== 27) return
             this.props.removeStream()
         })
     }
@@ -19,6 +20,7 @@ export default class VideoPlayer extends Component <Props, {}> {
         document.removeEventListener("keydown", this.getOut);
     }
     render() {
+        if (window.innerHeight <= 1000) return null
         const { removeStream, live, selected } = this.props
         if (!selected || !live) {
             return (
@@ -39,7 +41,10 @@ export default class VideoPlayer extends Component <Props, {}> {
                 <button className="video-button"
                 onClick={() => removeStream()}
                 >Exit</button>
+                <div className="video-settings">
+                <span>{stream.title}</span>
                 <span>{stream.viewers + " viewers"}</span>
+                </div>
                 <iframe src={vidUrl} frameBorder="0" />
                 </div>
                 <div className="chat">

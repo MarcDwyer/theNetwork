@@ -68,7 +68,7 @@ export default class Main extends Component <any, State> {
             <div>
                 <div className="topdiv">
                 <Featured live={live} selected={selected} setSelect={this.setSelect} />
-            <div className="parent">
+            <div className="parent parent-cont">
             <div className="container main-cont">
                 <h2>Active Streams</h2>
                 <div className="active-cards">

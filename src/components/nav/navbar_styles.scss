@@ -12,4 +12,9 @@ nav {
     h2 {
         margin: auto 0 auto 15px;
     }
+    @media (max-width: 1000px) {
+        h2 {
+            margin: auto;
+        }
+    }
 }
