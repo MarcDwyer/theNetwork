@@ -58,7 +58,9 @@ export default class Notifications extends Component <Props, State> {
                 <span>I will notify you when streamers go live!</span>
                 <span className="clear"
                 onClick={(e) => {
-                    localStorage.setItem("isClear", JSON.stringify(true))
+                    this.setState({loaded: false}, () => {
+                        localStorage.setItem("isClear", JSON.stringify(true))
+                    })
                 }}
                 >OK</span>
                 </div>

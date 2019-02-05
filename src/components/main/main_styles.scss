@@ -90,7 +90,8 @@
     }
     @media (max-width: 1000px) {
         .main-cont {
-            
+            width: 95%;
+
             .active-cards {
                 width: 100%;
                 grid-template-columns: repeat(1, 1fr);
