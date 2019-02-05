@@ -26,6 +26,7 @@ export default class Catalog extends Component <{}, State> {
         return (
             <div className="parent">
                 <div className="container cata-container">
+                    <h2>Catalog</h2>
                     <div className="cata-grid">
                         {this.renderCatalog()}
                     </div>

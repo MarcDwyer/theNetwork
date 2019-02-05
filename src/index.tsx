@@ -6,11 +6,14 @@ import * as serviceWorker from './serviceWorker';
 import Main from './components/main/main'
 import Navbar from './components/nav/navbar'
 import Catalog from './components/catalog/catalog'
+import Footer from './components/footer/footer'
+
 ReactDOM.render(
 <div>
 <Navbar />
 <Main />
 <Catalog />
+<Footer />
 </div>
 , document.getElementById('root'));
 
