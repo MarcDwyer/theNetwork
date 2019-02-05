@@ -99,7 +99,7 @@ export default class Main extends Component <any, State> {
     }
     renderStreams(): any {
         const { live } = this.state
-        return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers, imageId }: LiveStreams, index: number) => {
+        return (Object as any).values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId }: LiveStreams, index: number) => {
             const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
             const newTitle = title.slice(0, 44)
             const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
@@ -120,7 +120,15 @@ export default class Main extends Component <any, State> {
                         <div className="buttons">
                         <button
                         className="thebutton"
-                        onClick={() => this.setState({selected: channelId})}
+                        onClick={() => {
+                            if (window.innerWidth <= 900) {
+                                const youtubeLink: string = `https://www.youtube.com/watch?v=${videoId}`;
+                                const win: any = window.open(youtubeLink, '_blank');
+                                win.focus();
+                                return;
+                            }
+                            this.setState({selected: channelId})
+                        }}
                         >Watch</button>
                         </div>
                     </div>

@@ -3,13 +3,16 @@ $color: #BE8AC7;
 
 .cata-container {
     border-top: 1px solid #737376;
-    margin-bottom: 50px;
-
+    display: flex;
+    flex-direction: column;
     .cata-grid {
         display: grid;
-        width: 100%;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
         grid-template-columns: repeat(4, 1fr);
         column-gap: 20px;
+
     
         .cata-card {
             display: flex;
@@ -17,7 +20,7 @@ $color: #BE8AC7;
             color: white;
             height: 250px;
             max-width: 375px;
-            margin-top: 75px;
+            margin-bottom: 75px;
             border-radius: 10px;
             background-color: #25252E;
             
@@ -42,7 +45,7 @@ $color: #BE8AC7;
         }
     }
 
-    @media (max-width: 1800px) {
+    @media (max-width: 1920px) {
         .cata-grid {
             grid-template-columns: repeat(3, 1fr);
         }
@@ -60,8 +63,6 @@ $color: #BE8AC7;
                 grid-template-columns: repeat(1, 1fr);
 
                 .cata-card {
-                    margin-left: auto;
-                    margin-right: auto;
                     max-width: none;
                     width: 95%;
                 }
