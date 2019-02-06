@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
 import Notifications from '../notifications/notif'
+import { PacmanLoader } from 'react-spinners';
 import './main_styles.scss'
 
 interface State {
@@ -58,7 +59,13 @@ export default class Main extends Component <any, State> {
                 <div className="parent">
                     <div className="container">
                         <div className="offlineCard">
-                            <h4>No streamers online...</h4>
+                        <h2>Looking for streams...</h2>
+                        <PacmanLoader 
+                                  sizeUnit={"px"}
+                                  size={25}
+                                  color={'#123abc'}
+                                  
+                        />
                         </div>
                     </div>
                 </div>

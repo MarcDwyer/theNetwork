@@ -46,6 +46,7 @@ func getCatalog(w http.ResponseWriter, r *http.Request) {
 
 func sendStuff(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
+	return
 	b, err := json.Marshal(resp)
 	if err != nil {
 		fmt.Println(err)

@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="container footer-cont">
             <div className="footer-details">
             <span>Created by Marc Dwyer</span>
-            <a target="_blank" href="https://github.com/MarcDwyer">
+            <a target="_blank" href="https://github.com/MarcDwyer/theNetwork">
             <i className="fab fa-github" />
             </a>
             </div>
