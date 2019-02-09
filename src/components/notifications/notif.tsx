@@ -41,7 +41,6 @@ export default class Notifications extends Component <Props, State> {
                 })
 
                 const diff = this.difference(newNames, oldNames)
-                console.log(diff)
                 if (diff.length > 0) {
                  this.setState({difference: diff})
                 }
@@ -81,8 +80,9 @@ export default class Notifications extends Component <Props, State> {
                             <button
                             className="watch-now"
                             onClick={() => {
-                                this.props.select(channelId)
-                                this.setState({difference: []})
+                                this.setState({difference: []}, () => {
+                                    this.props.select(channelId)
+                                })
                             }}
                             >Watch now</button>
                             </div>
@@ -103,7 +103,6 @@ export default class Notifications extends Component <Props, State> {
     }
     difference(newNames: Checker[], old: Checker[]): Checker[] {
         let ch: Checker[] = []
-        console.log('diff is running')
         for (let x = 0; x < newNames.length; x++) {
             let match: boolean = false
             for (let i = 0; i < old.length; i++) {

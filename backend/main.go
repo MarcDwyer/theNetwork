@@ -30,6 +30,8 @@ var streamers = []Streamer{
 	{Name: "Mexican Andy", ChannelId: "UC8EmlqXIlJJpF7dTOmSywBg", ImageID: "mexican"},
 	{Name: "Chilledcow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: "chilled"},
 	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
+	{Name: "Voldesad", ChannelId: "UCPkOhci8gkwL7p6hxIJ2WQw", ImageID: "vold"},
+	{Name: "Cassandra", ChannelId: "UCoQnCN55E25nGavk79Asyng", ImageID: "cass"},
 }
 var resp []Newlive
 
@@ -46,7 +48,6 @@ func getCatalog(w http.ResponseWriter, r *http.Request) {
 
 func sendStuff(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	return
 	b, err := json.Marshal(resp)
 	if err != nil {
 		fmt.Println(err)

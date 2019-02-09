@@ -57,14 +57,15 @@ $color: #BE8AC7;
     }
     @media (max-width: 1000px) {
         & {
-            width: 100%;
+            width: 90% !important;
 
             .cata-grid {
                 grid-template-columns: repeat(1, 1fr);
+                width: 100%;
 
                 .cata-card {
                     max-width: none;
-                    width: 95%;
+                    width: 100%;
                 }
             }
         }

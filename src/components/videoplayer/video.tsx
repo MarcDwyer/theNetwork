@@ -19,8 +19,15 @@ export default class VideoPlayer extends Component <Props, {}> {
     componentWillUnmount() {
         document.removeEventListener("keydown", this.getOut);
     }
+    componentDidUpdate() {
+        const { live, selected, removeStream } = this.props
+        if (live && selected && !live[selected]) removeStream()
+    }
     render() {
-        if (window.innerHeight <= 1000) return null
+        if (window.innerWidth <= 1000) {
+            console.log('wtf')
+            return null
+        }
         const { removeStream, live, selected } = this.props
         if (!selected || !live) {
             return (
