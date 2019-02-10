@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { LSObj } from '../main/main'
 import './notif_styles.scss'
 interface Props{
@@ -12,6 +12,42 @@ interface State {
 interface Checker {
     name: string;
     channelId: string;
+}
+const difference = (newNames: Checker[], old: Checker[]): Checker[] => {
+    let ch: Checker[] = []
+    for (let x = 0; x < newNames.length; x++) {
+        let match: boolean = false
+        for (let i = 0; i < old.length; i++) {
+            if (newNames[x].name === old[i].name) {
+                match = true
+                break
+            }
+            if (i === old.length && !match) {
+                ch.push(newNames[x])
+            }
+        }
+        if (!match) {
+            ch.push(newNames[x])
+        }
+    }
+    return ch
+}
+
+const Notifications: JSX.Element = (props: Props) => {
+    const [loaded, setLoaded] = useState<boolean>(false)
+    const [diff, setDiff] = useState<Array<string>>([])
+
+    useEffect(() => {
+        const confirmed: string | null = localStorage.getItem("isClear") || null
+        if (confirmed) return
+        setTimeout(() => {
+            setLoaded(true)
+      }, 500)
+    }, [])
+
+    useEffect(() => {
+        
+    }, [props.live])
 }
 export default class Notifications extends Component <Props, State> {
     state: State = {
@@ -100,24 +136,5 @@ export default class Notifications extends Component <Props, State> {
             </div>
             </div>
         )
-    }
-    difference(newNames: Checker[], old: Checker[]): Checker[] {
-        let ch: Checker[] = []
-        for (let x = 0; x < newNames.length; x++) {
-            let match: boolean = false
-            for (let i = 0; i < old.length; i++) {
-                if (newNames[x].name === old[i].name) {
-                    match = true
-                    break
-                }
-                if (i === old.length && !match) {
-                    ch.push(newNames[x])
-                }
-            }
-            if (!match) {
-                ch.push(newNames[x])
-            }
-        }
-        return ch
     }
 }
