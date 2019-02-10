@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { LSObj } from '../main/main'
 import './notif_styles.scss'
-import { types } from 'util';
+
 interface Props{
     live: LSObj | null;
     setSelected: Function;
