@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { LSObj } from '../main/main'
 import './notif_styles.scss'
+import { types } from 'util';
 interface Props{
-    live: LSObj;
-    select: Function;
+    live: LSObj | null;
+    setSelected: Function;
 }
 interface State {
     loaded: boolean;
@@ -34,7 +35,7 @@ const difference = (newNames: Checker[], old: Checker[]): Checker[] => {
 }
 
 const Notifications = (props: Props): JSX.Element => {
-    const [loaded, setLoaded] = useState<boolean>(false)
+    const [trigger, setTrigger] = useState<boolean>(false)
     const [diff, setDiff] = useState<Checker[]>([]) 
     const [count, setCount] = useState<number>(0)
 
@@ -44,26 +45,61 @@ const Notifications = (props: Props): JSX.Element => {
         const confirmed: string | null = localStorage.getItem("isClear") || null
         if (confirmed) return
         setTimeout(() => {
-            setLoaded(true)
+            setTrigger(true)
       }, 500);
     }, []);
-
-    console.log(diff)
+    useEffect(() => {
+        if (trigger) {
+            setTimeout(() => {
+                setTrigger(false)
+                setDiff([])
+          }, 6500);
+        }
+    }, [trigger])
     useEffect(() => {
         setCount(count + 1)
-        if (count >= 1) {
-            console.log(count)
-            console.log('is this running')
+        if (oldProps.current && props.live) {
             const oldPrps = Object.values(oldProps.current)
             const newProps = Object.values(props.live)
-            oldProps.current = props.live
-
-            setDiff(difference(newProps, oldPrps))
+            const give: Checker[] = difference(newProps, oldPrps)
+            console.log(give)
+            if (give.length === 0) return
+            setTrigger(true)
+            setDiff(give)
         }
+        oldProps.current = props.live
     }, [props.live])
-
+    console.log(diff)
     return (
-        <span>hello</span>
+        <div className={`parent-notif ${trigger ? "prompt" : ""}`}>
+             <div className="notification">
+            {trigger && diff.length > 0 && diff.map(({ name, channelId }, index: number) => {
+                return (
+                    <div className="islive" key={index}>
+                    <span>{name} is live!</span>
+                    <button
+                    className="watch-now"
+                    onClick={() => {
+                        setTrigger(false)
+                        props.setSelected(channelId)
+                    }}
+                    >Watch now</button>
+                </div>
+                )
+            })}
+             {trigger && count <= 1 && (
+                 <div>
+                <span>I will notify you when streamers go live!</span>
+                   <span className="clear"
+                    onClick={() => {
+                        setTrigger(false)
+                        localStorage.setItem("isClear", JSON.stringify(true))
+                    }}
+                    >Ok</span>
+                    </div>
+            )}
+            </div>
+        </div>
     );
 };
 
