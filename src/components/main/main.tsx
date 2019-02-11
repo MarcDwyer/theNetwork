@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
 import Footer from '../footer/footer'
@@ -38,21 +38,23 @@ export interface ThumbnailDescr {
 
 const Main = () => {
     const [live, setLive] = useState<LSObj | null>(null)
-    const [fail, setFail] = useState<string | null>(null)
     const [selected, setSelected] = useState<string | null>(null)
-
+    const [err, setError] = useState<string | null>(null)
     const fetchStreams = async () => {
         try {
             const fetcher = await fetch('/streamers/live')
             const data = await fetcher.json()
-            if (!data) throw "No streamers online"
+            console.log(data)
+            if (!data || data.length === 0) throw "No streamers online... I'm searching!"
+            console.log(data)
             const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
                 obj[item.channelId] = item
                 return obj
             }, {})
             setLive(newData)
-        } catch (err) {
-            setFail(err)
+        } catch (er) {
+            setError(er)
+            if (live) setLive(null)
         }
     }
     useEffect(() => {
@@ -65,7 +67,7 @@ const Main = () => {
             <div className="container main-container">
                 {!live && (
                     <div className="offlineCard">
-                        <h2>No streamers online... I'm looking!</h2>
+                        <h2>{err}</h2>
                         <PacmanLoader
                             sizeUnit={"px"}
                             size={25}

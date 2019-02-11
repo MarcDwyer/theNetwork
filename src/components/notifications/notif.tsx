@@ -38,7 +38,7 @@ const Notifications = (props: Props): JSX.Element | null => {
     const [count, setCount] = useState<number>(0)
 
     let oldProps = useRef(props.live)
-    console.log()
+ 
     useEffect(() => {
         const confirmed: string | null = localStorage.getItem("isClear") || null
         if (confirmed) return
@@ -51,18 +51,22 @@ const Notifications = (props: Props): JSX.Element | null => {
             setCount(count + 1)
             setTimeout(() => {
                 setTrigger(false)
-                setDiff([])
+                if (diff.length > 1) setDiff([]) 
             }, 5000);
         }
     }, [trigger])
     useEffect(() => {
-        if (oldProps.current && props.live) {
+        if (props.live && oldProps.current) {
             const oldPrps = Object.values(oldProps.current)
             const newProps = Object.values(props.live)
             const give: Checker[] = difference(newProps, oldPrps)
             console.log(give)
             if (give.length === 0) return
             setDiff(give)
+            setTrigger(true)
+        } else if (props.live && !oldProps.current && count > 1) {
+            console.log('was this suppos to run')
+            setDiff(Object.values(props.live))
             setTrigger(true)
         }
         oldProps.current = props.live
