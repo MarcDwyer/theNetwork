@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
+import Footer from '../footer/footer'
 import Notifications from '../notifications/notif'
+import Catalog from '../catalog/catalog'
 import { PacmanLoader } from 'react-spinners';
 import './main_styles.scss'
-
-interface State {
-    live: null | LSObj;
-    error: string | null;
-    selected: string | null;
-}
 
 export interface LiveStreams {
     title: string;
@@ -125,6 +121,8 @@ const Main = () => {
             </div>
             <VideoPlayer selected={selected} live={live} setSelected={setSelected} />
             <Notifications live={live} setSelected={setSelected} />
+            <Catalog />
+            <Footer />
         </div>
     )
 }

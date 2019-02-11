@@ -14,7 +14,7 @@ const VideoPlayer = (props: Props) => {
             {props.selected && props.live && (() => {
                 const { live, selected } = props
                 const stream: LiveStreams = live[selected]
-                console.log(stream)
+                if (!stream) props.setSelected(null)
                 const vidUrl: string = `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&amp;showinfo=0&amp;modestbranding=1&amp;enablejsapi=1&amp`;
                 const chatUrl: string = `https://www.youtube.com/live_chat?v=${stream.videoId}&embed_domain=${window.location.hostname}`;
                 return (

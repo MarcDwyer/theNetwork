@@ -1,6 +1,9 @@
 .footer-parent {
     background-color: #25252E;
     height: 95px;
+    margin-top: 25px;
+    position: absolute;
+    bottom: 0;
     
     .footer-cont {
         display: flex;
