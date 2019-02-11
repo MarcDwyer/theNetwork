@@ -14,7 +14,7 @@ const one: LiveStreams = (Object as any).values(live)[0]
 const vidUrl: string = `https://www.youtube.com/embed/${one.videoId}?autoplay=1&amp;controls=0&amp;showinfo=0&amp;modestbranding=1&amp;autohide=1&amp&mute=1&rel=0`;
 return (
     <div className="parent parent-featured">
-        <div className="container">
+        <div className="container container-featured">
         <div className="featured-div">
         <iframe src={selected ? "" : vidUrl} frameBorder="0" />
         <div className="intro">

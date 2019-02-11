@@ -27,9 +27,7 @@ var streamers = []Streamer{
 	{Name: "Gary", ChannelId: "UCvxSwu13u1wWyROPlCH-MZg", ImageID: "gary"},
 	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews"},
 	{Name: "SJC", ChannelId: "UC4YYNTbzt3X1uxdTCJaYWdg", ImageID: "sjc"},
-	{Name: "Mexican Andy", ChannelId: "UC8EmlqXIlJJpF7dTOmSywBg", ImageID: "mexican"},
-	{Name: "Chilledcow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: "chilled"},
-	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
+	{Name: "Andy", ChannelId: "UC8EmlqXIlJJpF7dTOmSywBg", ImageID: "mexican"},
 	{Name: "Voldesad", ChannelId: "UCPkOhci8gkwL7p6hxIJ2WQw", ImageID: "vold"},
 	{Name: "Cassandra", ChannelId: "UCoQnCN55E25nGavk79Asyng", ImageID: "cass"},
 }
@@ -173,7 +171,20 @@ func getter() {
 					VideoID:     "test",
 					Thumbnail:   live.Items[0].Snippet.Thumbnails,
 				}
+				tester2 := Newlive{
+					Name:        "test2",
+					ImageID:     v.ImageID,
+					ChannelID:   "qwdascascsa121231231",
+					Title:       "test",
+					Description: "test",
+					Viewers:     1337,
+					Likes:       "1337",
+					Dislikes:    "0",
+					VideoID:     "test",
+					Thumbnail:   live.Items[0].Snippet.Thumbnails,
+				}
 				*final = append(*final, tester)
+				*final = append(*final, tester2)
 			}
 			*final = append(*final, rz)
 		}

@@ -5,12 +5,12 @@
         display: flex;
         flex-direction: column;
         min-height: calc(100vh - 100px);
-        
+
         .main-container {
             margin: auto;
             display: flex;
             flex-direction: column;
-    
+
             .active-cards {
                 display: grid;
                 width: 90%;
@@ -19,6 +19,16 @@
                 grid-template-columns: repeat(3, 1fr);
                 column-gap: 25px;
                 
+                @media (max-width: 1919px) {
+                    & {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 1919px) {
+                    & {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
                 .card {
                     display: flex;
                     flex-direction: column;
@@ -86,28 +96,21 @@
                     }
                 }
             }
-        }
-    
-        @media (max-width: 1920px) {
-            .main-cont {
-                .active-cards {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
-        }
-        @media (max-width: 1200px) {
-            .main-cont {
-                width: 95%;
-    
-                .active-cards {
-                    width: 100%;
-                    grid-template-columns: repeat(1, 1fr);
-                    
-                    .card {
-                        margin-left: auto;
-                        margin-right: auto;
-                        max-width: 550px;
+
+            @media (max-width: 1200px) {
+                & {
+                    width: 95%;
+        
+                    .active-cards {
                         width: 100%;
+                        grid-template-columns: repeat(1, 1fr);
+                        
+                        .card {
+                            margin-left: auto;
+                            margin-right: auto;
+                            max-width: 550px;
+                            width: 100%;
+                        }
                     }
                 }
             }
@@ -116,18 +119,13 @@
     
     
     .offlineCard {
-        margin-left: auto;
-        margin-right: auto;
+        margin: auto;
         display: flex;
         flex-direction: column;
         text-align: center;
-        margin-bottom: 35px;
+        margin-bottom: 5px;
 
-        h2 {
-            margin-left: 25px;
-        }
-        & *{
-            margin-left: auto;
-            margin-right: auto;
+        div {
+            margin: 0 auto 55px 85px;
         }
     }

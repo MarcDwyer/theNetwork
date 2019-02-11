@@ -65,7 +65,7 @@ const Main = () => {
             <div className="container main-container">
                 {!live && (
                     <div className="offlineCard">
-                        <h2>Looking for streams...</h2>
+                        <h2>No streamers online... I'm looking!</h2>
                         <PacmanLoader
                             sizeUnit={"px"}
                             size={25}
@@ -79,7 +79,7 @@ const Main = () => {
                         <Featured live={live} selected={selected} setSelect={setSelected} />
                         <h2>Active Streams</h2>
                         <div className="active-cards">
-                            {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId }, index: number) => {
+                            {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId, name }, index: number) => {
                                 const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
                                 const newTitle = title.slice(0, 44)
                                 const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
@@ -92,6 +92,7 @@ const Main = () => {
                                             <div className="content">
                                                 <img src={image} alt="streamer" />
                                                 <h3>{newTitle}</h3>
+                                                <small style={{margin: '-15px auto 0 auto'}}>{name}</small>
                                                 <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
                                                 <p className="description">
                                                     {description}

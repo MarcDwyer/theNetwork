@@ -8,58 +8,53 @@
     bottom: 35px;
     z-index: 1200;
     transition: .5s ease;
-    background-image: linear-gradient(45deg, #3023AE 0%, #FF0099 100%);
-    height: 155px;
-    width: 325px;
-    border-radius: 10px;
-    opacity: .90;
 
     .notification {
         display: flex;
-        height: 100%;
+        flex-direction: column;
+        border-radius: 10px;
+        height: 175px;
+        width: 350px;
+        background-image: linear-gradient(45deg, #3023AE 0%, #FF0099 100%);
+        opacity: .90;
+        position: relative;
         margin-bottom: 10px;
-
+        .clear {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 20px;
+            margin-right: auto;
+            margin-left: auto;
+            cursor: pointer;
+        }
         div {
-            height: 100%;
+            text-align: center;
+            width: 95%;
             margin: auto;
+            height: 100%;
             display: flex;
             flex-direction: column;
+
+            span {
+                font-weight: bold;
+            }
+            .watch-now {
+                background-color: #D6D6D6;
+                width: 85px;
+                height: 35px;
+                margin: auto;
+                border-radius: 5px;
+                padding: 5px 5px;
+                border: none;
+            }
         }
-    }
+        span {
+            margin: auto;
+        }
+}
 }
 
 .prompt {
     left: 55px;
-    text-align: center;
-
-    .clear {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        margin-left: -20px;
-        cursor: pointer;
-    }
-    .islive {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-
-        span {
-            font-weight: bold;
-        }
-        .watch-now {
-            background-color: #D6D6D6;
-            width: 85px;
-            height: 35px;
-            margin: auto;
-            text-align: center;
-            border-radius: 5px;
-            padding: 5px 5px;
-            border: none;
-        }
-    }
-    span {
-        margin: auto;
-    }
 }
