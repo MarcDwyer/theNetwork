@@ -39,7 +39,7 @@ export interface ThumbnailDescr {
 const Main = () => {
     const [live, setLive] = useState<LSObj | null>(null)
     const [selected, setSelected] = useState<string | null>(null)
-    const [err, setError] = useState<string | null>(null)
+
     const fetchStreams = async () => {
         try {
             const fetcher = await fetch('/streamers/live')
@@ -52,7 +52,7 @@ const Main = () => {
             }, {})
             setLive(newData)
         } catch (er) {
-            setError(er)
+            console.log(er)
             if (live) setLive(null)
         }
     }
