@@ -28,7 +28,7 @@ const Catalog = () => {
 
     return (
         <div className="parent">
-            <div className="container cata-container">
+            <div className="container cata-container" style={!catalog ? {borderTop: 'none'} : {}}>
                 {catalog && (
                     <div>
                         <div className="header" style={{ display: 'flex' }}>

@@ -45,13 +45,13 @@ const Main = () => {
             const fetcher = await fetch('/streamers/live')
             const data = await fetcher.json()
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
+            console.log(data)
             const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
                 obj[item.channelId] = item
                 return obj
             }, {})
             setLive(newData)
         } catch (er) {
-            setError(er)
             if (live) setLive(null)
         }
     }
@@ -65,7 +65,7 @@ const Main = () => {
             <div className="container main-container">
                 {!live && (
                     <div className="offlineCard">
-                        <h2>{err}</h2>
+                        <h2 style={{marginLeft: '-15px'}}>No Streamers online... I'm searching!</h2>
                         <PacmanLoader
                             sizeUnit={"px"}
                             size={25}
