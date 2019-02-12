@@ -52,6 +52,7 @@ const Main = () => {
             }, {})
             setLive(newData)
         } catch (er) {
+            setError(er)
             if (live) setLive(null)
         }
     }
