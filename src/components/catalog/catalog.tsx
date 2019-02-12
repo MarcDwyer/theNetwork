@@ -31,7 +31,12 @@ const Catalog = () => {
             <div className="container cata-container">
                 {catalog && (
                     <div>
-                        <h2>Catalog</h2>
+                        <div className="header" style={{ display: 'flex' }}>
+                            <h2>Active Streams </h2>
+                            <div className="stream-count" style={{ margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex' }}>
+                                <span style={{ margin: 'auto' }}>{Object.values(catalog).length}</span>
+                            </div>
+                        </div>
                         <div className="cata-grid">
                             {catalog.map(({ name, imageId, channelId }, index) => {
                                 const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`

@@ -44,9 +44,7 @@ const Main = () => {
         try {
             const fetcher = await fetch('/streamers/live')
             const data = await fetcher.json()
-            console.log(data)
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-            console.log(data)
             const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
                 obj[item.channelId] = item
                 return obj
@@ -79,7 +77,12 @@ const Main = () => {
                 {live && (
                     <div>
                         <Featured live={live} selected={selected} setSelect={setSelected} />
-                        <h2>Active Streams</h2>
+                        <div className="header" style={{display: 'flex'}}>
+                        <h2>Active Streams </h2>
+                        <div className="stream-count" style={{margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex'}}>
+                                <span style={{margin: 'auto'}}>{Object.values(live).length}</span>
+                            </div>
+                        </div>
                         <div className="active-cards">
                             {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId, name }, index: number) => {
                                 const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
