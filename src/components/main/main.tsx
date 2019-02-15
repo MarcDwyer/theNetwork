@@ -60,19 +60,20 @@ const Main = () => {
         fetchStreams()
         setInterval(fetchStreams, 25000)
     }, [])
-    
     return (
         <div className="parent main-parent">
             <div className="container main-container">
                 {!live && (
                     <div className="offlineCard">
-                        <h2 style={{marginLeft: '-15px'}}>No Streamers online... I'm searching!</h2>
+                        <h2>No Streamers online... I'm searching!</h2>
+                        <div className="loader">
                         <PacmanLoader
                             sizeUnit={"px"}
                             size={25}
                             color={'#123abc'}
 
                         />
+                        </div>
                     </div>
                 )}
                 {live && (

@@ -119,12 +119,15 @@
     
     
     .offlineCard {
-        margin: auto;
+        text-align: center;
         display: flex;
+        margin-bottom: 55px;
         flex-direction: column;
-        margin-bottom: 5px;
+        .loader {
+            margin: auto;
 
-        div {
-            margin: 0 auto 55px 85px;
+            & * {
+                margin-left: -10px;
+            }
         }
     }
