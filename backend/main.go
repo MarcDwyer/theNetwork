@@ -77,10 +77,14 @@ func main() {
 		}
 	}()
 	// http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public/build/static/"))))
+	hub := newHub()
+	go hub.run()
 
 	http.HandleFunc("/streamers/all", getCatalog)
 	http.HandleFunc("/streamers/live", sendStuff)
-
+	http.HandleFunc("/sockets/", func(w http.ResponseWriter, r *http.Request) {
+		SocketMe(hub, w, r)
+	})
 	//	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	//		if r.URL.Path == "/manifest.json" || r.URL.Path == "/favicon.png" {
 	//			str := fmt.Sprintf("./public/build/%v", r.URL.Path)

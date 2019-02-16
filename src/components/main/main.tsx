@@ -45,7 +45,6 @@ const Main = () => {
             const fetcher = await fetch('/streamers/live')
             const data = await fetcher.json()
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-            console.log(data)
             const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
                 obj[item.channelId] = item
                 return obj
