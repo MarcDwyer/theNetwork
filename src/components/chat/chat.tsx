@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './chat_styles.scss'
+import { WSAEACCES } from 'constants';
 
 interface State {
     chat: Array<string>;
@@ -7,6 +8,7 @@ interface State {
     ws: WebSocket;
     isAuth: boolean;
     open: boolean;
+    count: number | null;
     name: string;
 }
 class Chat extends Component<{}, State> {
@@ -16,12 +18,12 @@ class Chat extends Component<{}, State> {
         open: false,
         isAuth: false,
         name: '',
+        count: null,
         ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`)
     }
     componentDidMount() {
         const { ws, name } = this.state
         ws.addEventListener('message', this.getMessages)
-
         const localName = localStorage.getItem("name")
         if (localName) {
             this.setState({ isAuth: true, name: localName })
@@ -29,18 +31,23 @@ class Chat extends Component<{}, State> {
     }
     getMessages = (msg: any) => {
         const { chat } = this.state
-        console.log(msg.data)
+        const data = JSON.parse(msg.data)
+        
+        if (data.total) {
+            this.setState({count: data.total})
+            return
+        }
         this.setState({ chat: [...chat, JSON.parse(msg.data)] })
     }
     render() {
-        const { chat, message, ws, open, name, isAuth } = this.state
+        const { chat, message, ws, open, name, isAuth, count } = this.state
         return (
             <div className={`top-chat ${open ? 'open' : ''}`}>
                 <div className="nav-buttons"
                     onClick={() => this.setState({ open: !open })}
                 >
                     {open && (<i className="fas fa-minus" />)}
-                    <span>Chat</span>
+                    <span>Chat {count}</span>
                 </div>
                 {open && !isAuth && (
                     <div className="get-name">

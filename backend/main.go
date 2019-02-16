@@ -12,7 +12,6 @@ import (
 	"sort"
 	"strconv"
 	"sync"
-	"time"
 
 	"github.com/joho/godotenv"
 	fisheryates "github.com/matttproud/fisheryates"
@@ -65,17 +64,17 @@ func init() {
 
 func main() {
 	fmt.Println("Server Started...")
-	go getter()
+	// go getter()
 
-	go func() {
-		pollInterval := 10
+	//	go func() {
+	//		pollInterval := 10
+	//
+	//		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
-		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
-
-		for range timerCh {
-			getter()
-		}
-	}()
+	//		for range timerCh {
+	//			getter()
+	//		}
+	// }()
 	// http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public/build/static/"))))
 	hub := newHub()
 	go hub.run()

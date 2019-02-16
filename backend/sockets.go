@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,6 +21,10 @@ type Client struct {
 	send  chan []byte
 	id    string
 	reqid []byte
+}
+
+type Counter struct {
+	Total int `json:"total"`
 }
 
 const (
@@ -52,6 +57,7 @@ func (c *Client) readPump() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
+		c.sendCount()
 	}()
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
@@ -66,9 +72,18 @@ func (c *Client) readPump() {
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		c.reqid = message
-		fmt.Println(message)
+
+		//	count, _ := json.Marshal(len(c.hub.clients))
+		//	c.hub.broadcast <- count
 		c.hub.broadcast <- message
 	}
+}
+func (c *Client) sendCount() {
+	ch := Counter{
+		Total: len(c.hub.clients),
+	}
+	count, _ := json.Marshal(ch)
+	c.hub.broadcast <- count
 }
 
 // writePump pumps messages from the hub to the websocket connection.
@@ -91,7 +106,6 @@ func (c *Client) writePump() {
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-
 			w, err := c.conn.NextWriter(websocket.TextMessage)
 			if err != nil {
 				return
@@ -121,12 +135,12 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
-
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
+	fmt.Println(len(client.hub.clients))
+	go client.sendCount()
 	go client.writePump()
 	go client.readPump()
 }
