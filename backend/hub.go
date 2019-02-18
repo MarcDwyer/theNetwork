@@ -1,5 +1,10 @@
 package main
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 type Hub struct {
 	// Registered clients.
 	clients map[*Client]bool
@@ -13,6 +18,8 @@ type Hub struct {
 	// Unregister requests from clients.
 	unregister chan *Client
 }
+
+var totalChat int
 
 func newHub() *Hub {
 	return &Hub{
@@ -44,4 +51,13 @@ func (h *Hub) run() {
 			}
 		}
 	}
+}
+
+func (h *Hub) senderInt() {
+	fmt.Println(len(h.clients))
+	total := Counter{
+		Total: len(h.clients),
+	}
+	res, _ := json.Marshal(total)
+	h.broadcast <- res
 }

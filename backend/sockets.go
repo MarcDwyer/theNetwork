@@ -139,8 +139,6 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	client.hub.register <- client
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	fmt.Println(len(client.hub.clients))
-	go client.sendCount()
 	go client.writePump()
 	go client.readPump()
 }
