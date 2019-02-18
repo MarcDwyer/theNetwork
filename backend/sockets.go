@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	websocket "github.com/gorilla/websocket"
@@ -52,12 +53,15 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
+var wg2 sync.WaitGroup
 
 func (c *Client) readPump() {
 	defer func() {
+		wg2.Add(1)
 		c.hub.unregister <- c
-		c.conn.Close()
+		wg2.Wait()
 		c.sendCount()
+		c.conn.Close()
 	}()
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
@@ -137,6 +141,10 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
+	defer func() {
+		fmt.Println(len(client.hub.clients))
+		client.sendCount()
+	}()
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.writePump()

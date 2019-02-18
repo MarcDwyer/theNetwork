@@ -37,14 +37,15 @@ class Chat extends Component<{}, State> {
         }
     }
     componentDidUpdate(prevProps: {}, prevState: State) {
-        if (prevState.chat !== this.state.chat && this.chatRef && this.chatRef.current) {
+        if (prevState.chat !== this.state.chat || prevState.open !== this.state.open) {
+            if (!this.chatRef || !this.chatRef.current) return
             this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight;
         }
     }
     getMessages = (msg: any) => {
         const { chat } = this.state
         const data = JSON.parse(msg.data)
-        console.log(data)
+        console.log(data)   
         if (data.total) {
             this.setState({ count: data.total })
             return

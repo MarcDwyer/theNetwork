@@ -19,8 +19,6 @@ type Hub struct {
 	unregister chan *Client
 }
 
-var totalChat int
-
 func newHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
@@ -39,6 +37,7 @@ func (h *Hub) run() {
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
+				wg2.Done()
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
