@@ -134,17 +134,19 @@ func (c *Client) writePump() {
 		}
 	}
 }
+
+var wg3 sync.WaitGroup
+
 func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+	wg.Add(1)
 	client.hub.register <- client
-	defer func() {
-		fmt.Println(len(client.hub.clients))
-		client.sendCount()
-	}()
+	wg.Wait()
+	client.sendCount()
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.writePump()

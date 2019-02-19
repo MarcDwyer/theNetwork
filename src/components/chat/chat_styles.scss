@@ -93,8 +93,20 @@
             }
         }
     }
+    @media(max-width: 1000px) {
+        & {
+            width: 100%;
+            right: 0;
+        }
+    }
 }
 
 .open {
     height: 575px;
+
+    @media(max-width: 1000px) {
+        & {
+            height: 100%;
+        }
+    }
 }

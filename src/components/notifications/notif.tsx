@@ -75,8 +75,8 @@ const Notifications = (props: Props): JSX.Element | null => {
         <div className={`parent-notif ${trigger ? "prompt" : ""}`}>
             {trigger && diff.length > 0 && diff.map(({ name, channelId }, index: number) => {
                 return (
-                    <div className="notification">
-                        <div className="islive" key={index}>
+                    <div className="notification" key={index}>
+                        <div className="islive">
                             <span>{name} is live!</span>
                             <button
                                 className="watch-now"

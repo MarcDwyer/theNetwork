@@ -29,7 +29,7 @@ class Chat extends Component<{}, State> {
         ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`)
     }
     componentDidMount() {
-        const { ws, name } = this.state
+        const { ws } = this.state
         ws.addEventListener('message', this.getMessages)
         const localName = localStorage.getItem("name")
         if (localName) {
@@ -45,12 +45,17 @@ class Chat extends Component<{}, State> {
     getMessages = (msg: any) => {
         const { chat } = this.state
         const data = JSON.parse(msg.data)
-        console.log(data)   
+        console.log(data)
         if (data.total) {
             this.setState({ count: data.total })
             return
         }
         this.setState({ chat: [...chat, JSON.parse(msg.data)] })
+    }
+    setErr = (err: string) => {
+        this.setState({ error: err }, () => {
+            setTimeout(() => this.setState({ error: null }), 4000)
+        })
     }
     render() {
         const { chat, message, ws, open, name, isAuth, count, error } = this.state
@@ -76,7 +81,7 @@ class Chat extends Component<{}, State> {
                                         localStorage.setItem("name", name)
                                     })
                                 } catch (err) {
-                                    this.setState({ error: err })
+                                    this.setErr(err)
                                 }
                             }}
                         >
@@ -104,14 +109,19 @@ class Chat extends Component<{}, State> {
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault()
-                                    this.setState({ message: '' })
-                                    ws.send(JSON.stringify({ message: message, name: name }))
+                                    try {
+                                        if (message.length === 0) throw "Message cannot be empty"
+                                        ws.send(JSON.stringify({ message: message, name: name }))
+                                        this.setState({ message: '' })
+                                    } catch (err) {
+                                        this.setErr(err)
+                                    }
                                 }}
                             >
                                 <input type="text"
                                     value={message}
                                     onChange={(e) => this.setState({ message: e.target.value })}
-                                    placeholder="Send a message..."
+                                    placeholder={error ? error : "Send a message..."}
                                 />
                             </form>
                         </div>
