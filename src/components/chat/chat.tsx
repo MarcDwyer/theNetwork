@@ -26,7 +26,7 @@ class Chat extends Component<{}, State> {
         name: '',
         count: null,
         error: null,
-        ws: new WebSocket(`wss://${document.location.host}/sockets/`)
+        ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`)
     }
     componentDidMount() {
         const { ws } = this.state
