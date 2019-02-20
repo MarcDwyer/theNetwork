@@ -1,0 +1,18 @@
+.parent-modal {
+    background-color: rgba(0,0,0,.7);
+    position: fixed;
+    height: 100%;
+    overflow-y: hidden;
+    width: 100%;
+    z-index: 2000;
+    display: flex;
+    .child-modal {
+        margin: auto;
+        color: black;
+        opacity: 1;
+        background-color: #eee;
+        height: 650px;
+        overflow-y: hidden;
+        width: 650px;
+    }
+}

@@ -26,10 +26,13 @@ var streamers = []Streamer{
 	{Name: "Hyphonix", ChannelId: "UCaFpm67qMk1W1wJkFhGXucA", ImageID: "hyphonix"},
 	{Name: "Gary", ChannelId: "UCvxSwu13u1wWyROPlCH-MZg", ImageID: "gary"},
 	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews"},
-	{Name: "SJC", ChannelId: "UC4YYNTbzt3X1uxdTCJaYWdg", ImageID: "sjc"},
 	{Name: "Andy", ChannelId: "UC8EmlqXIlJJpF7dTOmSywBg", ImageID: "mexican"},
 	{Name: "Voldesad", ChannelId: "UCPkOhci8gkwL7p6hxIJ2WQw", ImageID: "vold"},
 	{Name: "Cassandra", ChannelId: "UCoQnCN55E25nGavk79Asyng", ImageID: "cass"},
+	{Name: "Juan Bagnell", ChannelId: "UCvhnYODy6WQ0mw_zi3V1h0g", ImageID: "juan"},
+	{Name: "Coding Train", ChannelId: "UCvjgXvBlbQiydffZU7m1_aw", ImageID: "coding"},
+	{Name: "Ethan & Hila", ChannelId: "UC7pp40MU_6rLK5pvJYG3d0Q", ImageID: "ethan"},
+	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe"},
 }
 var resp []Newlive
 
@@ -76,7 +79,6 @@ func main() {
 			getter()
 		}
 	}()
-	// http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public/build/static/"))))
 	hub := newHub()
 	go hub.run()
 
@@ -85,14 +87,6 @@ func main() {
 	http.HandleFunc("/sockets/", func(w http.ResponseWriter, r *http.Request) {
 		SocketMe(hub, w, r)
 	})
-	//	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	//		if r.URL.Path == "/manifest.json" || r.URL.Path == "/favicon.png" {
-	//			str := fmt.Sprintf("./public/build/%v", r.URL.Path)
-	//			http.ServeFile(w, r, str)
-	//			return
-	//		}
-	//		http.ServeFile(w, r, "./public/build/index.html")
-	//	})
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }

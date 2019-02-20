@@ -7,7 +7,7 @@ import Main from './components/main/main'
 import Navbar from './components/nav/navbar'
 
 ReactDOM.render(
-<div>
+<div className="padre">
 <Navbar />
 <Main />
 <Chat />

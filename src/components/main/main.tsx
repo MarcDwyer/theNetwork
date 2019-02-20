@@ -4,6 +4,7 @@ import Featured from '../featured/featured'
 import Footer from '../footer/footer'
 import Notifications from '../notifications/notif'
 import Catalog from '../catalog/catalog'
+import Info from '../stream_info/streamer_info'
 import { PacmanLoader } from 'react-spinners';
 import './main_styles.scss'
 
@@ -23,21 +24,27 @@ export interface LSObj {
     [key: string]: LiveStreams;
 }
 
-export interface Thumbnail {
+ interface Thumbnail {
     default: ThumbnailDescr;
     high: ThumbnailDescr;
     maxres: ThumbnailDescr;
     medium: ThumbnailDescr;
     standard: ThumbnailDescr;
 }
-export interface ThumbnailDescr {
+ interface ThumbnailDescr {
     height: number;
     url: string;
     width: number;
 }
-
+export interface Details {
+    title: string;
+    name: string;
+    description: string;
+    viewers: number;
+}
 const Main = () => {
     const [live, setLive] = useState<LSObj | null>(null)
+    const [details, setDetails] = useState<Details | null>(null)
     const [selected, setSelected] = useState<string | null>(null)
 
     const fetchStreams = async () => {
@@ -100,9 +107,19 @@ const Main = () => {
                                                 <h3>{newTitle}</h3>
                                                 <small style={{margin: '-15px auto 0 auto'}}>{name}</small>
                                                 <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
-                                                <p className="description">
-                                                    {description}
-                                                </p>
+                                                <span className="description"
+                                                onClick={() => {
+                                                    const info = {
+                                                        title,
+                                                        description,
+                                                        viewers,
+                                                        name
+                                                    }
+                                                    setDetails(info)
+                                                }}
+                                                >
+                                                Show description
+                                                </span>
                                             </div>
                                             <div className="buttons">
                                                 <button
@@ -127,6 +144,7 @@ const Main = () => {
                 )}
             </div>
             <VideoPlayer selected={selected} live={live} setSelected={setSelected} />
+            <Info details={details} setDetails={setDetails} />
             <Notifications live={live} setSelected={setSelected} />
             <Catalog />
             <Footer />

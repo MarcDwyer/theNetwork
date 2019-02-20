@@ -3,7 +3,7 @@ import './navbar_styles.scss'
 const Navbar = () => {
     return (
         <nav>
-            <h2 className="brand-logo">Hx Network</h2>
+            <h2 className="brand-logo">The Network</h2>
         </nav>
     )
 }
