@@ -8,7 +8,6 @@ interface Props {
 }
 const Info = (props: Props) => {
     if (!props.details) return null
-    console.log(props)
     const { description, title, viewers } = props.details
     return ReactDOM.createPortal(
         <div className="parent-modal"

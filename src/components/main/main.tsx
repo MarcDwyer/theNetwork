@@ -5,6 +5,8 @@ import Footer from '../footer/footer'
 import Notifications from '../notifications/notif'
 import Catalog from '../catalog/catalog'
 import Info from '../stream_info/streamer_info'
+import Card from '../card/card'
+import uuid from 'uuid'
 import { PacmanLoader } from 'react-spinners';
 import './main_styles.scss'
 
@@ -63,6 +65,7 @@ const Main = () => {
         fetchStreams()
         setInterval(fetchStreams, 25000)
     }, [])
+
     return (
         <div className="parent main-parent">
             <div className="container main-container">
@@ -89,61 +92,14 @@ const Main = () => {
                             </div>
                         </div>
                         <div className="active-cards">
-                            {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId, name, dislikes, likes }, index: number) => {
-                                const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
-                                const newTitle = title.slice(0, 34)
-                                const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
+                            {Object.values(live).map((item) => {
                                 return (
-                                    <div className="card" key={index}>
-                                        <div className="likes">
-                                            <span>
-                                                <i className="fas fa-thumbs-up" /> {likes}
-                                            </span>
-                                            <span>
-                                                <i className="fas fa-thumbs-down" /> {dislikes}
-                                            </span>
-                                        </div>
-                                        <div className="image">
-                                            <img src={newthumb} alt="thumbnail" />
-                                        </div>
-                                        <div className="details">
-                                            <div className="content">
-                                                <img src={image} alt="streamer" />
-                                                <div className="content-details">
-                                                    <h3>{newTitle}</h3>
-                                                    <small style={{ margin: '-15px auto 0 auto' }}>{name}</small>
-                                                    <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
-                                                </div>
-                                            </div>
-                                            <div className="buttons">
-                                                <button
-                                                    className="thebutton"
-                                                    onClick={() => {
-                                                        if (window.innerWidth <= 900) {
-                                                            const youtubeLink: string = `https://www.youtube.com/watch?v=${videoId}`;
-                                                            const win: any = window.open(youtubeLink, '_blank');
-                                                            win.focus();
-                                                            return;
-                                                        }
-                                                        setSelected(channelId)
-                                                    }}
-                                                >Watch</button>
-                                                <span className="details"
-                                                    onClick={() => {
-                                                        const info = {
-                                                            title,
-                                                            description,
-                                                            viewers,
-                                                            name
-                                                        }
-                                                        setDetails(info)
-                                                    }}
-                                                >
-                                                    Show description
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <Card
+                                        key={uuid()}
+                                        data={item}
+                                        setDetails={setDetails}
+                                        setSelected={setSelected}
+                                    />
                                 )
                             })}
                         </div>
