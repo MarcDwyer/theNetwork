@@ -51,6 +51,7 @@ const Main = () => {
         try {
             const fetcher = await fetch('/streamers/live')
             const data = await fetcher.json()
+            console.log(data)
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
             const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
                 obj[item.channelId] = item
@@ -66,7 +67,6 @@ const Main = () => {
         fetchStreams()
         setInterval(fetchStreams, 25000)
     }, [])
-    console.log(live)
     return (
         <div className="parent main-parent">
             <div className="container main-container">
