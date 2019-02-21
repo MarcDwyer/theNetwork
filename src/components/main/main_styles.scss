@@ -35,10 +35,27 @@
                     margin-bottom: 25px;
                     width: 100%;
                     max-width: 600px;
-                    height: 550px;
+                    height: 475px;
                     border-radius: 10px;    
                     background-color: #25252E;
+                    position: relative;
             
+                    .likes {
+                        position: absolute;
+                        background-color: rgba(190,138,199,.7);
+                        border-radius: 10px;
+                        width: 145px;
+                        top: 5px;
+                        right: 5px;
+                        display: flex;
+                        margin: 0 auto 0 auto;
+
+                        & * {
+                            color: white;
+                            margin: auto;
+                        }
+                    }
+
                     img {
                         height: 275px;
                         width: 100%;
@@ -57,6 +74,12 @@
                             flex-direction: column;
                             margin-top: -50px;
             
+                            .content-details {
+                                text-align: center;
+                                margin-top: -50px;
+                                display: flex;
+                                flex-direction: column;
+                            }
                             img {
                                 margin-left: 10px;
                                 border: solid 1px #25252E;
@@ -69,9 +92,6 @@
                                 margin-left: auto;
                                 margin-right: auto;
                             }
-                        h3 {
-                            text-align: center;
-                        }
                         p {
                             font-size: 14px;
                             width: 85%;
@@ -89,7 +109,7 @@
                             bottom: 5px;
             
                             span {
-                                margin-left: auto;
+                                margin: auto;
                                 cursor: pointer;
                                 margin-right: 15px;
                             }

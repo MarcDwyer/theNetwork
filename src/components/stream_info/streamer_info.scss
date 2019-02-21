@@ -7,6 +7,9 @@
     z-index: 2000;
     display: flex;
     .child-modal {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
         margin: auto;
         color: black;
         opacity: 1;
@@ -14,5 +17,22 @@
         height: 650px;
         overflow-y: hidden;
         width: 650px;
+        position:relative;
+
+        .content {
+            width: 95%;
+            margin: auto;
+        }
+        .close-div {
+            width: 85px;
+            font-size: 22px;
+            position: absolute;
+            bottom: 5px;
+            right: 15px;
+
+            &:hover {
+                background-color: rgba(0,0,0,.15);
+            }
+        }
     }
 }

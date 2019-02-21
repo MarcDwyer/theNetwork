@@ -24,14 +24,14 @@ export interface LSObj {
     [key: string]: LiveStreams;
 }
 
- interface Thumbnail {
+interface Thumbnail {
     default: ThumbnailDescr;
     high: ThumbnailDescr;
     maxres: ThumbnailDescr;
     medium: ThumbnailDescr;
     standard: ThumbnailDescr;
 }
- interface ThumbnailDescr {
+interface ThumbnailDescr {
     height: number;
     url: string;
     width: number;
@@ -66,6 +66,7 @@ const Main = () => {
         fetchStreams()
         setInterval(fetchStreams, 25000)
     }, [])
+    console.log(live)
     return (
         <div className="parent main-parent">
             <div className="container main-container">
@@ -73,53 +74,50 @@ const Main = () => {
                     <div className="offlineCard">
                         <h2>No Streamers online... I'm searching!</h2>
                         <div className="loader">
-                        <PacmanLoader
-                            sizeUnit={"px"}
-                            size={25}
-                            color={'#123abc'}
+                            <PacmanLoader
+                                sizeUnit={"px"}
+                                size={25}
+                                color={'#123abc'}
 
-                        />
+                            />
                         </div>
                     </div>
                 )}
                 {live && (
                     <div>
                         <Featured live={live} selected={selected} setSelect={setSelected} />
-                        <div className="header" style={{display: 'flex'}}>
-                        <h2>Active Streams </h2>
-                        <div className="stream-count" style={{margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex'}}>
-                                <span style={{margin: 'auto'}}>{Object.values(live).length}</span>
+                        <div className="header" style={{ display: 'flex' }}>
+                            <h2>Active Streams </h2>
+                            <div className="stream-count" style={{ margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex' }}>
+                                <span style={{ margin: 'auto' }}>{Object.values(live).length}</span>
                             </div>
                         </div>
                         <div className="active-cards">
-                            {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId, name }, index: number) => {
+                            {Object.values(live).map(({ title, thumbnails, description, channelId, viewers, imageId, videoId, name, dislikes, likes }, index: number) => {
                                 const newthumb: string = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
-                                const newTitle = title.slice(0, 44)
+                                const newTitle = title.slice(0, 34)
                                 const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
                                 return (
                                     <div className="card" key={index}>
+                                        <div className="likes">
+                                            <span>
+                                                <i className="fas fa-thumbs-up" /> {likes}
+                                            </span>
+                                            <span>
+                                                <i className="fas fa-thumbs-down" /> {dislikes}
+                                            </span>
+                                        </div>
                                         <div className="image">
                                             <img src={newthumb} alt="thumbnail" />
                                         </div>
                                         <div className="details">
                                             <div className="content">
                                                 <img src={image} alt="streamer" />
-                                                <h3>{newTitle}</h3>
-                                                <small style={{margin: '-15px auto 0 auto'}}>{name}</small>
-                                                <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
-                                                <span className="description"
-                                                onClick={() => {
-                                                    const info = {
-                                                        title,
-                                                        description,
-                                                        viewers,
-                                                        name
-                                                    }
-                                                    setDetails(info)
-                                                }}
-                                                >
-                                                Show description
-                                                </span>
+                                                <div className="content-details">
+                                                    <h3>{newTitle}</h3>
+                                                    <small style={{ margin: '-15px auto 0 auto' }}>{name}</small>
+                                                    <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
+                                                </div>
                                             </div>
                                             <div className="buttons">
                                                 <button
@@ -134,6 +132,19 @@ const Main = () => {
                                                         setSelected(channelId)
                                                     }}
                                                 >Watch</button>
+                                                <span className="details"
+                                                    onClick={() => {
+                                                        const info = {
+                                                            title,
+                                                            description,
+                                                            viewers,
+                                                            name
+                                                        }
+                                                        setDetails(info)
+                                                    }}
+                                                >
+                                                    Show description
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
