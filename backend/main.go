@@ -18,11 +18,12 @@ import (
 	fisheryates "github.com/matttproud/fisheryates"
 )
 
+var results = make(map[string]Newlive)
 var wg sync.WaitGroup
 var mykey string
 
 var streamers = []Streamer{
-	//	{Name: "Ice Poseidon", ChannelId: "UCv9Edl_WbtbPeURPtFDo-uA", ImageID: "ice"},
+	{Name: "Ice Poseidon", ChannelId: "UCv9Edl_WbtbPeURPtFDo-uA", ImageID: "ice"},
 	{Name: "Hyphonix", ChannelId: "UCaFpm67qMk1W1wJkFhGXucA", ImageID: "hyphonix"},
 	{Name: "Gary", ChannelId: "UCvxSwu13u1wWyROPlCH-MZg", ImageID: "gary"},
 	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews"},
@@ -33,9 +34,8 @@ var streamers = []Streamer{
 	{Name: "Coding Train", ChannelId: "UCvjgXvBlbQiydffZU7m1_aw", ImageID: "coding"},
 	{Name: "Ethan & Hila", ChannelId: "UC7pp40MU_6rLK5pvJYG3d0Q", ImageID: "ethan"},
 	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe"},
-	//	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
+	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
 }
-var resp []Newlive
 
 func getCatalog(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
@@ -50,7 +50,7 @@ func getCatalog(w http.ResponseWriter, r *http.Request) {
 
 func sendStuff(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	b, err := json.Marshal(resp)
+	b, err := json.Marshal(results)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -121,7 +121,7 @@ func getter() {
 		}
 	}()
 	go func() {
-		final := new([]Newlive)
+		final := []Newlive{}
 		for v := range ch {
 			if v == nil {
 				fmt.Println("nil value")
@@ -182,13 +182,15 @@ func getter() {
 					VideoID:     "test",
 					Thumbnail:   live.Items[0].Snippet.Thumbnails,
 				}
-				*final = append(*final, tester)
-				*final = append(*final, tester2)
+				final = append(final, tester)
+				final = append(final, tester2)
 			}
-			*final = append(*final, rz)
+			final = append(final, rz)
 		}
 		numb++
-		resp = *final
-		sort.Sort(ByViewers(resp))
+		sort.Sort(ByViewers(final))
+		for _, v := range final {
+			results[v.ChannelID] = v
+		}
 	}()
 }

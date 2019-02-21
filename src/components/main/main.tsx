@@ -53,11 +53,7 @@ const Main = () => {
             const data = await fetcher.json()
             console.log(data)
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-            const newData: LSObj = data.reduce((obj: LSObj, item: LiveStreams) => {
-                obj[item.channelId] = item
-                return obj
-            }, {})
-            setLive(newData)
+            setLive(data)
         } catch (er) {
             console.log(er)
             if (live) setLive(null)
