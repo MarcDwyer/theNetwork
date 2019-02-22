@@ -60,7 +60,7 @@ class Chat extends Component<{}, State> {
     render() {
         const { chat, message, ws, open, name, isAuth, count, error } = this.state
         return (
-            <div className={`top-chat ${open ? 'open' : ''}`}>
+            <div className={`top-chat ${open ? "open" : ""}`}>
                 <div className="nav-buttons"
                     onClick={() => this.setState({ open: !open })}
                 >

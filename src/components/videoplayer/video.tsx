@@ -1,6 +1,7 @@
 import React from 'react'
 import './video_styles.scss'
 import { LSObj, LiveStreams } from '../main/main'
+import { Exit } from '../styled_comp/styles'
 
 interface Props {
     selected: string | null;
@@ -20,9 +21,9 @@ const VideoPlayer = (props: Props) => {
                 return (
                     <div>
                         <div className="video">
-                            <button className="video-button"
+                            <Exit
                                 onClick={() => props.setSelected(null)}
-                            >Exit</button>
+                            >Exit</Exit>
                             <div className="video-settings">
                                 <span>{stream.title}</span>
                                 <span>{stream.viewers + " viewers"}</span>

@@ -35,7 +35,6 @@ var streamers = []Streamer{
 	{Name: "Ethan & Hila", ChannelId: "UC7pp40MU_6rLK5pvJYG3d0Q", ImageID: "ethan"},
 	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe"},
 	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
-	{Name: "ChilledCow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: "chilled"},
 }
 
 func getCatalog(w http.ResponseWriter, r *http.Request) {
