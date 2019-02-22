@@ -32,10 +32,10 @@
                 .card {
                     display: flex;
                     flex-direction: column;
-                    margin-bottom: 25px;
                     width: 100%;
-                    max-width: 600px;
-                    height: 475px;
+                    max-width: 550px;
+                    margin-bottom: 25px;
+                    height: 450px;
                     border-radius: 10px;    
                     background-color: #25252E;
                     position: relative;
@@ -44,7 +44,7 @@
                         position: absolute;
                         background-color: rgba(190,138,199,.7);
                         border-radius: 10px;
-                        width: 145px;
+                        width: 33%;
                         top: 5px;
                         right: 5px;
                         display: flex;

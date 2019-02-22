@@ -18,7 +18,7 @@ import (
 	fisheryates "github.com/matttproud/fisheryates"
 )
 
-var results = make(map[string]Newlive)
+var results []Newlive
 var wg sync.WaitGroup
 var mykey string
 
@@ -35,6 +35,7 @@ var streamers = []Streamer{
 	{Name: "Ethan & Hila", ChannelId: "UC7pp40MU_6rLK5pvJYG3d0Q", ImageID: "ethan"},
 	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe"},
 	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix"},
+	{Name: "ChilledCow", ChannelId: "UCSJ4gkVC6NrvII8umztf0Ow", ImageID: "chilled"},
 }
 
 func getCatalog(w http.ResponseWriter, r *http.Request) {
@@ -158,8 +159,6 @@ func getter() {
 			final = append(final, rz)
 		}
 		sort.Sort(ByViewers(final))
-		for _, v := range final {
-			results[v.ChannelID] = v
-		}
+		results = final
 	}()
 }

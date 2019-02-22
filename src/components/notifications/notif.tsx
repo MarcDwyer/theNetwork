@@ -71,6 +71,13 @@ const Notifications = (props: Props): JSX.Element | null => {
         }
         oldProps.current = props.live
     }, [props.live])
+    useEffect(() => {
+        if (diff.length > 0) {
+            document.title = `${diff[0].name} live!`
+            return
+        }
+        document.title = "The Network"
+    }, [diff])
     return (
         <div className={`parent-notif ${trigger ? "prompt" : ""}`}>
             {trigger && diff.length > 0 && diff.map(({ name, channelId }, index: number) => {
