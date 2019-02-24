@@ -12,7 +12,7 @@ interface Props {
 const Card = (props: Props) => {
     const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId } = props.data
     const newthumb = thumbnails.maxres.url.length > 0 ? thumbnails.maxres.url : thumbnails.high.url
-    const newTitle = title.slice(0, 34)
+    const newTitle = title.slice(0, 24)
     const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
 
     const theme = {
