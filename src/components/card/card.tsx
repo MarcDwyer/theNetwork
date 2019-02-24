@@ -1,6 +1,7 @@
 import React from 'react'
 import { LiveStreams } from '../main/main'
 import { Button } from '../styled_comp/styles'
+import { Visit, VisitSpan } from './card_styles'
 
 interface Props {
     data: LiveStreams;
@@ -19,6 +20,15 @@ const Card = (props: Props) => {
     }
     return (
         <div className="card">
+            <Visit
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`https://www.youtube.com/channel/${channelId}`}
+            >
+                <VisitSpan>
+                    Visit Channel
+                </VisitSpan>
+            </Visit>
             <div className="likes">
                 <span>
                     <i className="fas fa-thumbs-up" /> {likes}

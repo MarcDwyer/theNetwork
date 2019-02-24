@@ -16,7 +16,6 @@ const Catalog = () => {
             const fetchCata = await fetch('/streamers/all')
             const data: Stream[] | null = await fetchCata.json()
             if (!data) throw "Catalog Fetching failed"
-            console.log(data)
             setCatalog(data)
         } catch (err) {
             setFail(err)

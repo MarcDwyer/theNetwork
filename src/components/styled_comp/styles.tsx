@@ -3,12 +3,21 @@ import styled from 'styled-components'
 export const Button = styled.button`
     width: 85px;
     background-color: transparent;
-    border: solid 1px #BE8AC7;
+    border: solid 1px ${props => props.theme.borderColor ? props.theme.borderColor : "#BE8AC7"};
     cursor: pointer;
     padding: 15px 15px;
     text-align: center;
-    color: #BE8AC7;
+    color: ${props => props.theme.color ? props.theme.color : "#BE8AC7"};
     margin-left: ${props => props.theme.marginLeft};
+    z-index: ${props => props.theme.zIndex}
+
+    &:hover {
+        border: solid 1px #E3CDE7;
+        color: #E3CDE7;
+    }
+    &:focus {
+        outline: 0;
+    }
 `
 
 export const Exit = styled.button`
@@ -27,4 +36,11 @@ export const Exit = styled.button`
     width: 85px;
     z-index: 1003;
     
+    &:hover {
+        border: solid 1px #FFB2B2;
+        color: #FFB2B2;
+    }
+    &:focus {
+        outline: 0;
+    }
 `

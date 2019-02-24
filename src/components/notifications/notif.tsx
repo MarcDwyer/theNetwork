@@ -38,7 +38,7 @@ const Notifications = (props: Props): JSX.Element | null => {
     const [count, setCount] = useState<number>(0)
 
     let oldProps = useRef(props.live)
- 
+
     useEffect(() => {
         const confirmed: string | null = localStorage.getItem("isClear") || null
         if (confirmed) return
@@ -51,7 +51,10 @@ const Notifications = (props: Props): JSX.Element | null => {
             setCount(count + 1)
             setTimeout(() => {
                 setTrigger(false)
-                if (diff.length > 1) setDiff([]) 
+                if (diff.length > 1) {
+                    document.title = "The Network"
+                    setDiff([])
+                }
             }, 5000);
         }
     }, [trigger])
@@ -60,8 +63,8 @@ const Notifications = (props: Props): JSX.Element | null => {
             const oldPrps = Object.values(oldProps.current)
             const newProps = Object.values(props.live)
             const give: Checker[] = difference(newProps, oldPrps)
-            console.log(give)
             if (give.length === 0) return
+            document.title = `${give[0].name} is live!`
             setDiff(give)
             setTrigger(true)
         } else if (props.live && !oldProps.current && count > 1) {
@@ -71,13 +74,6 @@ const Notifications = (props: Props): JSX.Element | null => {
         }
         oldProps.current = props.live
     }, [props.live])
-    useEffect(() => {
-        if (diff.length > 0) {
-            document.title = `${diff[0].name} live!`
-            return
-        }
-        document.title = "The Network"
-    }, [diff])
     return (
         <div className={`parent-notif ${trigger ? "prompt" : ""}`}>
             {trigger && diff.length > 0 && diff.map(({ name, channelId }, index: number) => {

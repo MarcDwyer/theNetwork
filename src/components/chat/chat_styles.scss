@@ -1,14 +1,16 @@
 .top-chat {
     position: fixed;
     bottom: 0;
-    right: 5%;
+    right: 20%;
     width: 425px;
     height: 35px;
     display: flex;
     flex-direction: column;
-    background-color: #D6D6D6;
-    color: black;
+    background-color: #25252E;
+    color: #eee;
     z-index: 1004;
+    border: 1px solid black;
+    box-shadow: 1px 10px 10px black;
     
     .nav-buttons {
         display: flex;
@@ -55,7 +57,7 @@
 
         .send-message {
             display: flex;
-            background-color: #eee;
+            background-color: #3A3A42;
             height: 35px;
             form {
                 margin: 0 5px 0 5px;
@@ -65,7 +67,8 @@
                     margin: auto;
                     height: 100%;
                     width: 100%;
-                    background-color: inherit;
+                    color: #eee;
+                    background-color: #3A3A42;
                     border: none;
                 }
                 input:focus {
