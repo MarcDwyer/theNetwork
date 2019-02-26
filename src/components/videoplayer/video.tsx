@@ -28,7 +28,8 @@ const VideoPlayer = (props: Props) => {
     const theme = {
         borderColor: "#7FBF7F",
         color: "#7FBF7F",
-        zIndex: '4000'
+        zIndex: '4000',
+        padding: '10px 10px'
     }
     return (
         <div className={`parent-video ${props.selected ? "video-trigger" : ""}`}

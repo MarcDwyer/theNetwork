@@ -5,11 +5,11 @@ export const Button = styled.button`
     background-color: transparent;
     border: solid 1px ${props => props.theme.borderColor ? props.theme.borderColor : "#BE8AC7"};
     cursor: pointer;
-    padding: 15px 15px;
+    padding: ${props => props.theme.padding ? props.theme.padding : '15px 15px'};
     text-align: center;
     color: ${props => props.theme.color ? props.theme.color : "#BE8AC7"};
     margin-left: ${props => props.theme.marginLeft};
-    z-index: ${props => props.theme.zIndex}
+    z-index: ${props => props.theme.zIndex};
 
     &:hover {
         border: solid 1px #E3CDE7;
