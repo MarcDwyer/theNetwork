@@ -65,6 +65,20 @@
             }
         }
     }
+    .the-likes {
+        display: flex;
+        position: absolute;
+        bottom: 10px;
+        left: 25px;
+
+        span {
+            margin-right: 15px;
+
+            i {
+                margin-right: 15px;
+            }
+        }
+    }
 }
 
 .video-trigger {

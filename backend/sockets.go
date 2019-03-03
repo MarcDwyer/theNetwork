@@ -143,6 +143,7 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+	fmt.Println(client)
 	wg.Add(1)
 	client.hub.register <- client
 	wg.Wait()

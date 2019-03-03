@@ -70,14 +70,15 @@ func init() {
 func main() {
 	fmt.Println("Server Started...")
 	go getter()
-
+	go GetTwitch()
 	go func() {
 		pollInterval := 10
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
 		for range timerCh {
-			getter()
+			go getter()
+			go GetTwitch()
 		}
 	}()
 	hub := newHub()
@@ -120,6 +121,9 @@ func getter() {
 	}()
 	go func() {
 		final := []Newlive{}
+		if ch == nil {
+			return
+		}
 		for v := range ch {
 			if v == nil {
 				fmt.Println("nil value")
@@ -154,6 +158,7 @@ func getter() {
 				Dislikes:    live.Items[0].Statistics.DislikeCount,
 				VideoID:     live.Items[0].ID,
 				Thumbnail:   live.Items[0].Snippet.Thumbnails,
+				Type:        "youtube",
 			}
 			final = append(final, rz)
 		}

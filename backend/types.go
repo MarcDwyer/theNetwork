@@ -167,6 +167,7 @@ type Newlive struct {
 	Dislikes    string     `json:"dislikes"`
 	VideoID     string     `json:"videoId"`
 	Thumbnail   Thumbnails `json:"thumbnails"`
+	Type        string     `json:"type"`
 }
 type ByViewers []Newlive
 

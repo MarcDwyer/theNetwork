@@ -26,7 +26,7 @@ class Chat extends Component<{}, State> {
         name: '',
         count: null,
         error: null,
-        ws: new WebSocket(`wss://${document.location.host}/sockets/`)
+        ws: new WebSocket(`ws://${document.location.hostname    }:5000/sockets/`)
     }
     componentDidMount() {
         const { ws } = this.state
@@ -47,7 +47,10 @@ class Chat extends Component<{}, State> {
         const data = JSON.parse(msg.data)
         console.log(data)
         if (data.total) {
-            this.setState({ count: data.total })
+            this.setState((prevState) => {
+                console.log(prevState)
+                return { count: data.total }
+            })
             return
         }
         this.setState({ chat: [...chat, JSON.parse(msg.data)] })

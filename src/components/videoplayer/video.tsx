@@ -68,6 +68,10 @@ const VideoPlayer = (props: Props) => {
                         <div className="chat">
                             <iframe src={chatUrl} frameBorder="0" />
                         </div>
+                        <div className="the-likes">
+                                <span><i style={{color: 'green'}} className="fas fa-thumbs-up" />{stream.likes}</span>
+                                <span> <i style={{color: 'red'}} className="fas fa-thumbs-down" /> {stream.dislikes}</span>
+                        </div>
                     </div>
                 )
             })()}
