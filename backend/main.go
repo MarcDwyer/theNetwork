@@ -3,14 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"runtime"
-	"sort"
-	"strconv"
 	"sync"
 	"time"
 
@@ -18,7 +15,7 @@ import (
 	fisheryates "github.com/matttproud/fisheryates"
 )
 
-var results []Newlive
+var Results []Newlive
 var wg sync.WaitGroup
 var mykey string
 
@@ -50,7 +47,7 @@ func getCatalog(w http.ResponseWriter, r *http.Request) {
 
 func sendStuff(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	b, err := json.Marshal(results)
+	b, err := json.Marshal(Results)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -69,100 +66,24 @@ func init() {
 
 func main() {
 	fmt.Println("Server Started...")
-	go getter()
-	go GetTwitch()
+	go GetYoutube()
 	go func() {
 		pollInterval := 10
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
 		for range timerCh {
-			go getter()
-			go GetTwitch()
+			go GetYoutube()
 		}
 	}()
 	hub := newHub()
 	go hub.run()
 
-	http.HandleFunc("/streamers/all", getCatalog)
-	http.HandleFunc("/streamers/live", sendStuff)
+	http.HandleFunc("/youtube/all", getCatalog)
+	http.HandleFunc("/youtube/live", sendStuff)
 	http.HandleFunc("/sockets/", func(w http.ResponseWriter, r *http.Request) {
 		SocketMe(hub, w, r)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
-}
-
-func getter() {
-	fmt.Println("getting....")
-	ch := make(chan *Islive)
-	go func() {
-		defer close(ch)
-		for _, v := range streamers {
-			url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", v.ChannelId, mykey)
-			resp, err := http.Get(url)
-			if err != nil || resp.StatusCode != 200 {
-				fmt.Println(err)
-				continue
-			}
-			body, err := ioutil.ReadAll(resp.Body)
-			if err != nil {
-				fmt.Println(err)
-			}
-			var streamer Islive
-			json.Unmarshal(body, &streamer)
-			if streamer.PageInfo.TotalResults == 0 {
-				continue
-			}
-			streamer.Name = v.Name
-			streamer.ImageID = v.ImageID
-			ch <- &streamer
-		}
-	}()
-	go func() {
-		final := []Newlive{}
-		if ch == nil {
-			return
-		}
-		for v := range ch {
-			if v == nil {
-				fmt.Println("nil value")
-				continue
-			}
-			id := v.Items[0].ID.VideoID
-			resp, err := http.Get("https://www.googleapis.com/youtube/v3/videos?part=statistics%2C+snippet%2C+liveStreamingDetails&id=" + id + "&key=" + mykey)
-			if err != nil || resp.StatusCode != 200 {
-				fmt.Println(err)
-				continue
-			}
-			body, err := ioutil.ReadAll(resp.Body)
-			if err != nil {
-				fmt.Println(err)
-			}
-			var live Livestream
-			json.Unmarshal(body, &live)
-			name, err := strconv.Atoi(live.Items[0].LiveStreamingDetails.ConcurrentViewers)
-			if err != nil {
-				fmt.Println(name)
-				fmt.Println(err)
-				continue
-			}
-			rz := Newlive{
-				Name:        v.Name,
-				ImageID:     v.ImageID,
-				ChannelID:   live.Items[0].Snippet.ChannelID,
-				Title:       live.Items[0].Snippet.Title,
-				Description: live.Items[0].Snippet.Description,
-				Viewers:     name,
-				Likes:       live.Items[0].Statistics.LikeCount,
-				Dislikes:    live.Items[0].Statistics.DislikeCount,
-				VideoID:     live.Items[0].ID,
-				Thumbnail:   live.Items[0].Snippet.Thumbnails,
-				Type:        "youtube",
-			}
-			final = append(final, rz)
-		}
-		sort.Sort(ByViewers(final))
-		results = final
-	}()
 }

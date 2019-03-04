@@ -129,52 +129,15 @@ type Livestream struct {
 	} `json:"items"`
 }
 type Thumbnails struct {
-	Default struct {
-		URL    string `json:"url"`
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-	} `json:"default"`
-	Medium struct {
-		URL    string `json:"url"`
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-	} `json:"medium"`
-	High struct {
-		URL    string `json:"url"`
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-	} `json:"high"`
-	Standard struct {
-		URL    string `json:"url"`
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-	} `json:"standard"`
-	Maxres struct {
-		URL    string `json:"url"`
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-	} `json:"maxres"`
-}
-
-type Newlive struct {
-	Name        string     `json:"name"`
-	ImageID     string     `json:"imageId"`
-	ChannelID   string     `json:"channelId"`
-	Title       string     `json:"title"`
-	Description string     `json:"description"`
-	Viewers     int        `json:"viewers"`
-	Likes       string     `json:"likes"`
-	Dislikes    string     `json:"dislikes"`
-	VideoID     string     `json:"videoId"`
-	Thumbnail   Thumbnails `json:"thumbnails"`
-	Type        string     `json:"type"`
+	High string `json:"high"`
+	Low  string `json"low"`
 }
 type ByViewers []Newlive
 
 func (a ByViewers) Len() int      { return len(a) }
 func (a ByViewers) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a ByViewers) Less(i, j int) bool {
-	return a[i].Viewers > a[j].Viewers
+	return *a[i].Viewers > *a[j].Viewers
 }
 
 type Random []Streamer
