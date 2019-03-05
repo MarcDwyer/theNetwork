@@ -184,7 +184,6 @@ func GetYoutube() {
 func getTwitch(r Streamer, i int) {
 	defer func() {
 		if i == len(streamers)-1 {
-			fmt.Println("ballsdepep")
 			wait.Done()
 		}
 	}()
