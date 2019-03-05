@@ -5,6 +5,7 @@ interface Stream {
     name: string;
     channelId: string;
     imageId: string;
+    type: string;
 }
 
 
@@ -37,15 +38,15 @@ const Catalog = () => {
                             </div>
                         </div>
                         <div className="cata-grid">
-                            {catalog.map(({ name, imageId, channelId }, index) => {
-                                const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
+                            {catalog.map(({ name, imageId, channelId, type }, index) => {
+                                const image: string = imageId === "hasanabi" || imageId === "richardlewis" ? `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpeg` : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
 
                                 return (
                                     <div className="cata-card" key={index}>
                                         <h4>{name}</h4>
                                         <img src={image} alt="streamer" />
                                         <div className="social-buttons">
-                                            <a target="_blank" className="fab fa-youtube" href={`https://www.youtube.com/channel/${channelId}`} />
+                                            <a target="_blank" className="fab fa-youtube" href={type === "youtube" ? `https://www.youtube.com/channel/${channelId}` : `https://twitch.tv/${name}`} />
                                         </div>
                                     </div>
                                 )

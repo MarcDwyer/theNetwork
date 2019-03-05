@@ -21,22 +21,15 @@ export interface LiveStreams {
     viewers: number;
     videoId: string;
     thumbnails: Thumbnail;
+    type: string;
 }
 export interface LSObj {
     [key: string]: LiveStreams;
 }
 
 interface Thumbnail {
-    default: ThumbnailDescr;
-    high: ThumbnailDescr;
-    maxres: ThumbnailDescr;
-    medium: ThumbnailDescr;
-    standard: ThumbnailDescr;
-}
-interface ThumbnailDescr {
-    height: number;
-    url: string;
-    width: number;
+    high: string;
+    low: string;
 }
 export interface Details {
     title: string;
@@ -54,6 +47,8 @@ const Main = () => {
             const fetcher = await fetch('/streamers/live')
             const data: LiveStreams[] = await fetcher.json()
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
+            console.log(data)
+          //  const sorted = data.sort((a, b) => a.viewers < b.viewers ? 1 : -1)
             const newdata = data.reduce((obj: LSObj, item) => {
                 obj[item.channelId] = item
                 return obj

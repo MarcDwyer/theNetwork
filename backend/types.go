@@ -6,6 +6,7 @@ type Streamer struct {
 	Name      string `json:"name"`
 	ChannelId string `json:"channelId"`
 	ImageID   string `json:"imageId"`
+	Type      string `json:"type"`
 }
 type Islive struct {
 	Kind       string `json:"kind,omitemptys"`
@@ -130,7 +131,7 @@ type Livestream struct {
 }
 type Thumbnails struct {
 	High string `json:"high"`
-	Low  string `json"low"`
+	Low  string `json:"low"`
 }
 type ByViewers []Newlive
 

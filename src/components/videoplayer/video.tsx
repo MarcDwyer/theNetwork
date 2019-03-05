@@ -8,13 +8,13 @@ interface Props {
     live: LSObj | null;
     setSelected: Function;
 }
-
+// https://player.twitch.tv/
 const VideoPlayer = (props: Props) => {
     const [minimize, setMinimize] = useState<boolean>(false)
 
     const oldProps = useRef(props.selected)
 
-    useEffect(() => {   
+    useEffect(() => {
         if (oldProps.current && props.selected) {
             if (oldProps.current !== props.selected) {
                 setMinimize(false)
@@ -24,6 +24,13 @@ const VideoPlayer = (props: Props) => {
         }
         oldProps.current = props.selected
     }, [props.selected])
+    useEffect(() => {
+        if (props.selected && !minimize) {
+            document.body.style.overflow = "hidden"
+        } else if (minimize && props.selected || !props.selected) {
+            document.body.style.overflow = "auto"
+        }
+    }, [minimize, props.selected])
 
     const theme = {
         borderColor: "#7FBF7F",
@@ -33,7 +40,7 @@ const VideoPlayer = (props: Props) => {
     }
     return (
         <div className={`parent-video ${props.selected ? "video-trigger" : ""}`}
-        style={minimize ? {bottom: "calc(95px - 100vh)"} : {}}
+            style={minimize ? { bottom: "calc(95px - 100vh)" } : {}}
         >
             {props.selected && props.live && (() => {
                 const { live, selected } = props
@@ -42,20 +49,20 @@ const VideoPlayer = (props: Props) => {
                     props.setSelected(null)
                     return null
                 }
-                const vidUrl: string = `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&amp;showinfo=0&amp;modestbranding=1&amp;enablejsapi=1&amp`;
-                const chatUrl: string = `https://www.youtube.com/live_chat?v=${stream.videoId}&embed_domain=${window.location.hostname}`;
+                const vidUrl: string = stream.type === "youtube" ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&amp;showinfo=0&amp;modestbranding=1&amp;enablejsapi=1&amp` : `https://player.twitch.tv/?channel=${stream.name}&muted=false`;
+                const chatUrl: string = stream.type === "youtube" ? `https://www.youtube.com/live_chat?v=${stream.videoId}&embed_domain=${window.location.hostname}` : `https://www.twitch.tv/embed/${stream.name}/chat`;
                 return (
                     <div>
                         <div className="video">
                             <Button
                                 theme={theme}
-                                style={{ position: "absolute", top: "5px", right: "5px"}}
+                                style={{ position: "absolute", top: "5px", right: "5px" }}
                                 onClick={() => {
                                     setMinimize(!minimize)
                                 }}
                             >
                                 {!minimize ? "Minimize" : "Maximize"}
-                        </Button>
+                            </Button>
                             <Exit
                                 onClick={() => props.setSelected(null)}
                             >Exit</Exit>
@@ -68,10 +75,12 @@ const VideoPlayer = (props: Props) => {
                         <div className="chat">
                             <iframe src={chatUrl} frameBorder="0" />
                         </div>
-                        <div className="the-likes">
-                                <span><i style={{color: 'green'}} className="fas fa-thumbs-up" />{stream.likes}</span>
-                                <span> <i style={{color: 'red'}} className="fas fa-thumbs-down" /> {stream.dislikes}</span>
-                        </div>
+                        {stream.likes && (
+                            <div className="the-likes">
+                                <span><i style={{ color: 'green' }} className="fas fa-thumbs-up" />{stream.likes}</span>
+                                <span> <i style={{ color: 'red' }} className="fas fa-thumbs-down" /> {stream.dislikes}</span>
+                            </div>
+                        )}
                     </div>
                 )
             })()}

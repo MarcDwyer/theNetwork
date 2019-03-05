@@ -6,7 +6,7 @@ export const Visit = styled.a`
     top: 5px;
     left: 5px;
     width: 85px;
-    background-color: rgba(255,76,76, .85);
+    background-color: ${props => !props.theme.isYoutube ? "#4B367C" : "rgba(255,76,76, .85)"};
     border: none;
     cursor: pointer;
     padding: 5px 5px;
