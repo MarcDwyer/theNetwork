@@ -83,6 +83,9 @@ func (c *Client) readPump() {
 	}
 }
 func (c *Client) sendCount() {
+	if c.hub.clients == nil {
+		return
+	}
 	ch := Counter{
 		Total: len(c.hub.clients),
 	}

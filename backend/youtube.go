@@ -84,6 +84,7 @@ var streamers = []Streamer{
 	{Name: "Cjayride", Type: "twitch", ImageID: "cjayride"},
 	{Name: "Hitch", Type: "twitch", ImageID: "hitch"},
 	{Name: "Rajjpatel", Type: "twitch", ImageID: "hitch"},
+	{Name: "TrainwrecksTv", Type: "twitch", ImageID: "trainwreckstv"},
 }
 var payload = make(chan Newlive)
 var done = make(chan bool)
@@ -94,11 +95,15 @@ func GetYoutube() {
 	wait.Add(2)
 	fmt.Println("getting....")
 	ch := make(chan *Islive)
+
+	defer func() {
+		wait.Wait()
+		done <- true
+	}()
 	go func() {
 		defer close(ch)
-		for i, v := range streamers {
+		for _, v := range streamers {
 			if v.Type == "twitch" {
-				go getTwitch(v, i)
 				continue
 			}
 			url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", v.ChannelId, mykey)
@@ -123,6 +128,7 @@ func GetYoutube() {
 		}
 	}()
 	go func() {
+		defer wait.Done()
 		if ch == nil {
 			return
 		}
@@ -166,60 +172,53 @@ func GetYoutube() {
 			}
 			payload <- rz
 		}
-		wait.Done()
-	}()
-	go func() {
-		fmt.Println("waiting...")
-		wait.Wait()
-		fmt.Println("done")
-		done <- true
 	}()
 }
 
-//defer func() {
-//	sort.Sort(ByViewers(final))
-//	Results = final
-// }()
-
-func getTwitch(r Streamer, i int) {
-	defer func() {
-		if i == len(streamers)-1 {
-			wait.Done()
+func GetTwitch() {
+	defer wait.Done()
+	for _, v := range streamers {
+		if v.Type != "twitch" {
+			continue
 		}
-	}()
-	url := fmt.Sprintf("https://api.twitch.tv/kraken/streams/%v?client_id=%v", r.Name, os.Getenv("TWITCH"))
-	rz, err := http.Get(url)
-	if err != nil {
-		fmt.Println(err)
+		url := fmt.Sprintf("https://api.twitch.tv/kraken/streams/%v?client_id=%v", v.Name, os.Getenv("TWITCH"))
+		rz, err := http.Get(url)
+		if err != nil {
+			fmt.Println(err)
+		}
+		body, err := ioutil.ReadAll(rz.Body)
+		defer rz.Body.Close()
+		var res TwitchResponse
+		json.Unmarshal(body, &res)
+		fmt.Println(res.Stream.Channel.Name)
+		if res.Stream.Channel.Status == nil {
+			return
+		}
+		thumb := Thumbnails{High: *res.Stream.Preview.Large, Low: *res.Stream.Preview.Medium}
+		result := Newlive{
+			ChannelID: &res.Stream.Channel.Name,
+			Name:      &res.Stream.Channel.Name,
+			ImageID:   &res.Stream.Channel.Logo,
+			VideoID:   &res.Stream.Channel.Name,
+			Title:     res.Stream.Channel.Status,
+			Viewers:   res.Stream.Viewers,
+			Thumbnail: thumb,
+			Type:      "twitch",
+		}
+		payload <- result
 	}
-	body, err := ioutil.ReadAll(rz.Body)
-	defer rz.Body.Close()
-	var res TwitchResponse
-	json.Unmarshal(body, &res)
-	if res.Stream.Channel.Status == nil {
-		return
-	}
-	thumb := Thumbnails{High: *res.Stream.Preview.Large, Low: *res.Stream.Preview.Medium}
-	result := Newlive{
-		ChannelID: &res.Stream.Channel.Name,
-		Name:      &res.Stream.Channel.Name,
-		ImageID:   &res.Stream.Channel.Logo,
-		VideoID:   &res.Stream.Channel.Name,
-		Title:     res.Stream.Channel.Status,
-		Viewers:   res.Stream.Viewers,
-		Thumbnail: thumb,
-		Type:      "twitch",
-	}
-	payload <- result
 }
-func Listen() {
+
+func Listener() {
 	final := []Newlive{}
 	for {
 		select {
 		case request := <-payload:
+			fmt.Println(*request.Name)
 			final = append(final, request)
 		case isDone := <-done:
-			if ok := isDone; ok {
+			fmt.Println(isDone)
+			if isDone {
 				Results = final
 				sort.Sort(ByViewers(Results))
 				final = nil

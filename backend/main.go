@@ -51,15 +51,17 @@ func init() {
 
 func main() {
 	fmt.Println("Server Started...")
-	go Listen()
+	go Listener()
 	go GetYoutube()
+	go GetTwitch()
 	go func() {
 		pollInterval := 10
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
 		for range timerCh {
-			GetYoutube()
+			go GetYoutube()
+			go GetTwitch()
 		}
 	}()
 	hub := newHub()
