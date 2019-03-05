@@ -55,7 +55,7 @@ func main() {
 	go GetYoutube()
 	go GetTwitch()
 	go func() {
-		pollInterval := 10
+		pollInterval := 5
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 
