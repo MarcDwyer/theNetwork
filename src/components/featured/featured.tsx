@@ -17,12 +17,13 @@ const Featured = (props: Props) => {
     
     return (
         <div className="parent parent-featured">
+        <h1 style={{margin: "0px"}}>Featured</h1>
             <div className="container container-featured">
                 <div className="featured-div">
                     <iframe src={selected ? "" : vidUrl} frameBorder="0" />
                     <div className="intro">
                         <div className="flexer">
-                            <h2>{one.name}</h2>
+                            <h2>{one.displayName || one.name}</h2>
                             <span>{one.title}</span>
                             <span><i style={{ color: 'red' }} className="fas fa-dot-circle" /> {one.viewers} viewers</span>
                         </div>

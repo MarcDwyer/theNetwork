@@ -10,7 +10,7 @@ interface Props {
 
 }
 const Card = (props: Props) => {
-    const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name } = props.data
+    const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name, displayName } = props.data
     const newthumb = thumbnails.high.length > 0 ? thumbnails.high : thumbnails.low
     const newTitle = title.slice(0, 24)
     const image: string = imageId.startsWith("https") ? imageId : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
@@ -49,7 +49,7 @@ const Card = (props: Props) => {
                     <img src={image} alt="streamer" style={type !== "youtube" ? {border: "3px solid #4B367C"} : {border: "solid 3px red "}}/>
                     <div className="content-details">
                         <h3>{newTitle}</h3>
-                        <small style={{ margin: '-15px auto 0 auto' }}>{name} on {type}</small>
+                        <small style={{ margin: '-15px auto 0 auto' }}>{displayName || name} on {type}</small>
                         <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
                     </div>
                 </div>

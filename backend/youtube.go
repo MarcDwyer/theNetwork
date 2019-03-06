@@ -63,6 +63,7 @@ type Newlive struct {
 	VideoID     *string    `json:"videoId"`
 	Thumbnail   Thumbnails `json:"thumbnails"`
 	Type        string     `json:"type"`
+	DisplayName *string    `json:"displayName"`
 }
 
 // []string{"hasanabi", "destiny", "invadervie", "richardlewisreports", "hitch", "cjayride", "trainwreckstv"}
@@ -161,14 +162,15 @@ func (s Streamer) getData() {
 		}
 		thumb := Thumbnails{High: *res.Stream.Preview.Large, Low: *res.Stream.Preview.Medium}
 		result := Newlive{
-			ChannelID: &res.Stream.Channel.Name,
-			Name:      &res.Stream.Channel.Name,
-			ImageID:   &res.Stream.Channel.Logo,
-			VideoID:   &res.Stream.Channel.Name,
-			Title:     res.Stream.Channel.Status,
-			Viewers:   res.Stream.Viewers,
-			Thumbnail: thumb,
-			Type:      "twitch",
+			ChannelID:   &res.Stream.Channel.Name,
+			Name:        &res.Stream.Channel.Name,
+			ImageID:     &res.Stream.Channel.Logo,
+			VideoID:     &res.Stream.Channel.Name,
+			Title:       res.Stream.Channel.Status,
+			Viewers:     res.Stream.Viewers,
+			Thumbnail:   thumb,
+			Type:        "twitch",
+			DisplayName: &res.Stream.Channel.DisplayName,
 		}
 		payload <- result
 	}

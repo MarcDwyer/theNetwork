@@ -51,14 +51,12 @@ func init() {
 
 func main() {
 	fmt.Println("Server Started...")
-	fmt.Println(done)
 	go Listener()
 	go Waitme()
 	go func() {
 		pollInterval := 1
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
-
 		for range timerCh {
 			go Waitme()
 		}

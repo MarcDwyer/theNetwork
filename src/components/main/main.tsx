@@ -22,6 +22,7 @@ export interface LiveStreams {
     videoId: string;
     thumbnails: Thumbnail;
     type: string;
+    displayName: string | null;
 }
 export interface LSObj {
     [key: string]: LiveStreams;
