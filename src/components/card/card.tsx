@@ -46,10 +46,10 @@ const Card = (props: Props) => {
             </div>
             <div className="details">
                 <div className="content">
-                    <img src={image} alt="streamer" style={type !== "youtube" ? {border: "5px solid #4B367C"} : {}}/>
+                    <img src={image} alt="streamer" style={type !== "youtube" ? {border: "3px solid #4B367C"} : {border: "solid 3px red "}}/>
                     <div className="content-details">
                         <h3>{newTitle}</h3>
-                        <small style={{ margin: '-15px auto 0 auto' }}>{name}</small>
+                        <small style={{ margin: '-15px auto 0 auto' }}>{name} on {type}</small>
                         <span><i style={{ color: "red" }} className="fas fa-dot-circle" /> {viewers + " viewers"}</span>
                     </div>
                 </div>
