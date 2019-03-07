@@ -56,14 +56,15 @@ type Newlive struct {
 	ImageID     *string    `json:"imageId"`
 	ChannelID   *string    `json:"channelId"`
 	Title       *string    `json:"title"`
-	Description *string    `json:"description"`
+	Description *string    `json:"description,omitempty"`
 	Viewers     *int       `json:"viewers"`
-	Likes       *string    `json:"likes"`
-	Dislikes    *string    `json:"dislikes"`
+	Likes       *string    `json:"likes,omitempty"`
+	Dislikes    *string    `json:"dislikes,omitempty"`
 	VideoID     *string    `json:"videoId"`
 	Thumbnail   Thumbnails `json:"thumbnails"`
+	DisplayName *string    `json:"displayName,omitempty"`
+	IsPlaying   *string    `json:"isPlaying,omitempty"`
 	Type        string     `json:"type"`
-	DisplayName *string    `json:"displayName"`
 }
 
 // []string{"hasanabi", "destiny", "invadervie", "richardlewisreports", "hitch", "cjayride", "trainwreckstv"}
@@ -86,6 +87,7 @@ var streamers = []Streamer{
 	{Name: "Hitch", Type: "twitch", ImageID: "hitch"},
 	{Name: "Rajjpatel", Type: "twitch", ImageID: "rajjpatel"},
 	{Name: "TrainwrecksTv", Type: "twitch", ImageID: "trainwreckstv"},
+	{Name: "GreekGodx", Type: "twitch", ImageID: "greekgodx"},
 }
 var payload = make(chan Newlive)
 var done = make(chan bool)
@@ -95,10 +97,11 @@ var waiter sync.WaitGroup
 func (s Streamer) getData() {
 	defer waiter.Done()
 	if s.Type == "youtube" {
-		url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", s.ChannelId, mykey)
+		url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", s.ChannelId, os.Getenv("KEY"))
 		resp, err := http.Get(url)
 		if err != nil || resp.StatusCode != 200 {
-			fmt.Println(err)
+			fmt.Println("youtube req erro")
+			fmt.Println(resp)
 			return
 		}
 		defer resp.Body.Close()
@@ -169,8 +172,9 @@ func (s Streamer) getData() {
 			Title:       res.Stream.Channel.Status,
 			Viewers:     res.Stream.Viewers,
 			Thumbnail:   thumb,
-			Type:        "twitch",
 			DisplayName: &res.Stream.Channel.DisplayName,
+			IsPlaying:   res.Stream.Game,
+			Type:        "twitch",
 		}
 		payload <- result
 	}

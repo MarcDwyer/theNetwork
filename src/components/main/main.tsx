@@ -16,13 +16,14 @@ export interface LiveStreams {
     channelId: string;
     description: string;
     imageId: string;
-    likes: string;
-    dislikes: string;
+    likes: string | null;
+    dislikes: string | null;
     viewers: number;
-    videoId: string;
+    videoId: string | null;
     thumbnails: Thumbnail;
-    type: string;
     displayName: string | null;
+    isPlaying: string | null;
+    type: string;
 }
 export interface LSObj {
     [key: string]: LiveStreams;
@@ -62,7 +63,7 @@ const Main = () => {
     }
     useEffect(() => {
         fetchStreams()
-        setInterval(fetchStreams, 25000)
+        setInterval(fetchStreams, 75000)
     }, [])
 
     return (

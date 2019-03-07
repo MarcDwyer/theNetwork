@@ -54,7 +54,7 @@ func main() {
 	go Listener()
 	go Waitme()
 	go func() {
-		pollInterval := 1
+		pollInterval := 5
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 		for range timerCh {

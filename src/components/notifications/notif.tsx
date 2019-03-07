@@ -51,8 +51,8 @@ const Notifications = (props: Props): JSX.Element | null => {
             setCount(count + 1)
             setTimeout(() => {
                 setTrigger(false)
+                document.title = "The Network"
                 if (diff.length > 1) {
-                    document.title = "The Network"
                     setDiff([])
                 }
             }, 5000);
