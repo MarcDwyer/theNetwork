@@ -44,7 +44,6 @@ const Main = () => {
             const fetcher = await fetch('/streamers/live')
             const data: LiveStreams[] = await fetcher.json()
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-            console.log(data)
           //  const sorted = data.sort((a, b) => a.viewers < b.viewers ? 1 : -1)
             const newdata = data.reduce((obj: LSObj, item) => {
                 obj[item.channelId] = item

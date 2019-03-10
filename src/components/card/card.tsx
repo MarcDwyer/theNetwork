@@ -11,7 +11,6 @@ interface Props {
 }
 const Card = (props: Props) => {
     const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name, displayName, isPlaying } = props.data
-    const newthumb = thumbnails.high.length > 0 ? thumbnails.high : thumbnails.low
     const newTitle = title.slice(0, 24)
     const image: string = imageId.startsWith("https") ? imageId : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}`
     const theme = {
@@ -41,7 +40,7 @@ const Card = (props: Props) => {
                 </div>
             )}
             <div className="image">
-                <img src={newthumb} alt="thumbnail" />
+                <img src={thumbnails.high || thumbnails.low} alt="thumbnail" />
             </div>
             <div className="details">
                 <div className="content">

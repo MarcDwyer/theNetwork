@@ -21,14 +21,18 @@ const Featured = (props: Props) => {
 
     const { live, selected, setSelect } = props
     const one: LiveStreams = (Object as any).values(live)[0]
-    const vidUrl: string = one.type == "youtube" ? `https://www.youtube.com/embed/${one.videoId}?autoplay=${!autoplay ? "1" : "0"}&amp;controls=1&amp;showinfo=0&amp;modestbranding=1&amp;autohide=1&amp&mute=1&rel=0` : `https://player.twitch.tv/?channel=${one.name}`;
-
+    const vidUrl: string = one.type == "youtube" ? `https://www.youtube.com/embed/${one.videoId}?autoplay=${!autoplay ? "1" : "0"}&amp;controls=1&amp;showinfo=0&amp;modestbranding=1&amp;autohide=1&amp&mute=1&rel=0` : `https://player.twitch.tv/?channel=${one.name}&autoplay=${!autoplay}`;
     return (
         <div className="parent parent-featured">
             <div className="container container-featured">
                 <h2 style={{ margin: "0px" }}>Featured Streamer</h2>
                 <div className="featured-div">
-                    <iframe src={selected ? "" : vidUrl} frameBorder="0" />
+                    {!selected && (
+                        <iframe src={selected ? "" : vidUrl} frameBorder="0" />
+                    )}
+                    {selected && (
+                        <img src={one.thumbnails.high || one.thumbnails.low} alt="thumbnail"/>
+                    )}
                     <div className="intro">
                         <div className="flexer">
                             <h2>{one.displayName || one.name}</h2>
@@ -37,13 +41,13 @@ const Featured = (props: Props) => {
                         </div>
                         {!autoplay && (
                             <button
-                            className="disableAuto"
-                            onClick={(e) => {
-                                localStorage.setItem("autoplay", JSON.stringify(true))
-                                setAutoplay(true)
-                            }}
+                                className="disableAuto"
+                                onClick={(e) => {
+                                    localStorage.setItem("autoplay", JSON.stringify(true))
+                                    setAutoplay(true)
+                                }}
                             >
-                            Disable Autoplay
+                                Disable Autoplay
                             </button>
                         )}
                         <Button

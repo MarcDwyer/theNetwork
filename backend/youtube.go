@@ -138,7 +138,11 @@ func (s Streamer) getData() {
 			fmt.Println(err)
 			return
 		}
-		thumb := Thumbnails{High: live.Items[0].Snippet.Thumbnails.Maxres.URL, Low: live.Items[0].Snippet.Thumbnails.High.URL}
+		thumb := Thumbnails{Low: &live.Items[0].Snippet.Thumbnails.High.URL}
+		if len(live.Items[0].Snippet.Thumbnails.Maxres.URL) > 0 {
+			thumb.High = &live.Items[0].Snippet.Thumbnails.Maxres.URL
+		}
+
 		rz := Newlive{
 			Name:        &streamer.Name,
 			ImageID:     &streamer.ImageID,
@@ -166,7 +170,7 @@ func (s Streamer) getData() {
 		if res.Stream.Channel.Status == nil {
 			return
 		}
-		thumb := Thumbnails{High: *res.Stream.Preview.Large, Low: *res.Stream.Preview.Medium}
+		thumb := Thumbnails{High: res.Stream.Preview.Large, Low: res.Stream.Preview.Medium}
 		result := Newlive{
 			ChannelID:   &res.Stream.Channel.Name,
 			Name:        &res.Stream.Channel.Name,

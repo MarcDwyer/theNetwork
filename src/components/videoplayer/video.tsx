@@ -49,7 +49,6 @@ const VideoPlayer = (props: Props) => {
                     props.setSelected(null)
                     return null
                 }
-                console.log(stream.type)
                 const vidUrl: string = stream.type === "youtube" ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&amp;showinfo=0&amp;modestbranding=1&amp;enablejsapi=1&amp` : `https://player.twitch.tv/?channel=${stream.name}&muted=false`;
                 const chatUrl: string = stream.type === "youtube" ? `https://www.youtube.com/live_chat?v=${stream.videoId}&embed_domain=${window.location.hostname}` : `https://www.twitch.tv/embed/${stream.name}/chat?darkpopout`;
                 return (

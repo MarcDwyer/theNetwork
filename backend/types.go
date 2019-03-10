@@ -130,8 +130,8 @@ type Livestream struct {
 	} `json:"items"`
 }
 type Thumbnails struct {
-	High string `json:"high"`
-	Low  string `json:"low"`
+	High *string `json:"high,omitempty"`
+	Low  *string `json:"low,omitempty"`
 }
 type ByViewers []Newlive
 
