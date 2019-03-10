@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '../styled_comp/styles'
 import { LSObj, LiveStreams } from '../main/main'
 import './featured_styles.scss'
@@ -10,15 +10,23 @@ interface Props {
 }
 const Featured = (props: Props) => {
     if (!props.live || window.innerWidth <= 1000) return null
+
+    const [autoplay, setAutoplay] = useState<boolean>(false)
+
+    useEffect(() => {
+        // @ts-ignore
+        const isAuto = JSON.parse(localStorage.getItem('autoplay'))
+        if (isAuto) setAutoplay(true)
+    }, [])
+
     const { live, selected, setSelect } = props
     const one: LiveStreams = (Object as any).values(live)[0]
-    const vidUrl: string = one.type =="youtube" ? `https://www.youtube.com/embed/${one.videoId}?autoplay=1&amp;controls=0&amp;showinfo=0&amp;modestbranding=1&amp;autohide=1&amp&mute=1&rel=0` : `https://player.twitch.tv/?channel=${one.name}`;
+    const vidUrl: string = one.type == "youtube" ? `https://www.youtube.com/embed/${one.videoId}?autoplay=${!autoplay ? "1" : "0"}&amp;controls=1&amp;showinfo=0&amp;modestbranding=1&amp;autohide=1&amp&mute=1&rel=0` : `https://player.twitch.tv/?channel=${one.name}`;
 
-    
     return (
         <div className="parent parent-featured">
             <div className="container container-featured">
-            <h2 style={{margin: "0px"}}>Featured Streamer</h2>
+                <h2 style={{ margin: "0px" }}>Featured Streamer</h2>
                 <div className="featured-div">
                     <iframe src={selected ? "" : vidUrl} frameBorder="0" />
                     <div className="intro">
@@ -27,8 +35,21 @@ const Featured = (props: Props) => {
                             <span>{one.title}</span>
                             <span><i style={{ color: 'red' }} className="fas fa-dot-circle" /> {one.viewers} viewers</span>
                         </div>
+                        {!autoplay && (
+                            <button
+                            className="disableAuto"
+                            onClick={(e) => {
+                                localStorage.setItem("autoplay", JSON.stringify(true))
+                                setAutoplay(true)
+                            }}
+                            >
+                            Disable Autoplay
+                            </button>
+                        )}
                         <Button
-                            onClick={() => setSelect(one.channelId)}
+                            onClick={() => {
+                                setSelect(one.channelId)
+                            }}
                         >Watch</Button>
                     </div>
                 </div>

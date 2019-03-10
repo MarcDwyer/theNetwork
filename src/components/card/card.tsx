@@ -18,7 +18,6 @@ const Card = (props: Props) => {
         marginLeft: "15px",
         isYoutube: type === "youtube" ? true : false
     }
-    console.log(theme.isYoutube)
     return (
         <div className="card">
             <Visit
