@@ -60,34 +60,37 @@ type Newlive struct {
 	Viewers     *int       `json:"viewers"`
 	Likes       *string    `json:"likes,omitempty"`
 	Dislikes    *string    `json:"dislikes,omitempty"`
-	VideoID     *string    `json:"videoId"`
+	VideoID     *string    `json:"videoId, omitempty"`
 	Thumbnail   Thumbnails `json:"thumbnails"`
 	DisplayName *string    `json:"displayName,omitempty"`
 	IsPlaying   *string    `json:"isPlaying,omitempty"`
+	Mature      *bool      `json:"mature, omitempty"`
 	Type        string     `json:"type"`
 }
 
 // []string{"hasanabi", "destiny", "invadervie", "richardlewisreports", "hitch", "cjayride", "trainwreckstv"}
 var streamers = []Streamer{
-	{Name: "Ice Poseidon", ChannelId: "UCv9Edl_WbtbPeURPtFDo-uA", ImageID: "ice", Type: "youtube"},
-	{Name: "Hyphonix", ChannelId: "UCaFpm67qMk1W1wJkFhGXucA", ImageID: "hyphonix", Type: "youtube"},
-	{Name: "Gary", ChannelId: "UCvxSwu13u1wWyROPlCH-MZg", ImageID: "gary", Type: "youtube"},
-	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews", Type: "youtube"},
-	{Name: "Voldesad", ChannelId: "UCPkOhci8gkwL7p6hxIJ2WQw", ImageID: "vold", Type: "youtube"},
-	{Name: "Cassandra", ChannelId: "UCoQnCN55E25nGavk79Asyng", ImageID: "cass", Type: "youtube"},
-	{Name: "Juan Bagnell", ChannelId: "UCvhnYODy6WQ0mw_zi3V1h0g", ImageID: "juan", Type: "youtube"},
-	{Name: "Coding Train", ChannelId: "UCvjgXvBlbQiydffZU7m1_aw", ImageID: "coding", Type: "youtube"},
-	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe", Type: "youtube"},
-	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix", Type: "youtube"},
-	{Name: "Hasanabi", Type: "twitch", ImageID: "hasanabi"},
-	{Name: "Destiny", Type: "twitch", ImageID: "destiny"},
-	{Name: "Invadervie", Type: "twitch", ImageID: "invadervie"},
-	{Name: "Richardlewisreports", Type: "twitch", ImageID: "richardlewis"},
-	{Name: "Cjayride", Type: "twitch", ImageID: "cjayride"},
-	{Name: "Hitch", Type: "twitch", ImageID: "hitch"},
-	{Name: "Rajjpatel", Type: "twitch", ImageID: "rajjpatel"},
-	{Name: "TrainwrecksTv", Type: "twitch", ImageID: "trainwreckstv"},
-	{Name: "GreekGodx", Type: "twitch", ImageID: "greekgodx"},
+	{Name: "Ice Poseidon", ChannelId: "UCv9Edl_WbtbPeURPtFDo-uA", ImageID: "ice.jpg", Type: "youtube"},
+	{Name: "Hyphonix", ChannelId: "UCaFpm67qMk1W1wJkFhGXucA", ImageID: "hyphonix.jpg", Type: "youtube"},
+	{Name: "Gary", ChannelId: "UCvxSwu13u1wWyROPlCH-MZg", ImageID: "gary.jpg", Type: "youtube"},
+	{Name: "Cxnews", ChannelId: "UCStEQ9BjMLjHTHLNA6cY9vg", ImageID: "cxnews.jpg", Type: "youtube"},
+	{Name: "Voldesad", ChannelId: "UCPkOhci8gkwL7p6hxIJ2WQw", ImageID: "vold.jpg", Type: "youtube"},
+	{Name: "Cassandra", ChannelId: "UCoQnCN55E25nGavk79Asyng", ImageID: "cass.jpg", Type: "youtube"},
+	{Name: "Juan Bagnell", ChannelId: "UCvhnYODy6WQ0mw_zi3V1h0g", ImageID: "juan.jpg", Type: "youtube"},
+	{Name: "Coding Train", ChannelId: "UCvjgXvBlbQiydffZU7m1_aw", ImageID: "coding.jpg", Type: "youtube"},
+	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe.jpg", Type: "youtube"},
+	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix.jpg", Type: "youtube"},
+	{Name: "Hasanabi", Type: "twitch", ImageID: "hasanabi.jpeg"},
+	{Name: "Destiny", Type: "twitch", ImageID: "destiny.jpg"},
+	{Name: "Invadervie", Type: "twitch", ImageID: "invadervie.jpg"},
+	{Name: "Richardlewisreports", Type: "twitch", ImageID: "richardlewis.jpeg"},
+	{Name: "Cjayride", Type: "twitch", ImageID: "cjayride.jpg"},
+	{Name: "Hitch", Type: "twitch", ImageID: "hitch.jpg"},
+	{Name: "Rajjpatel", Type: "twitch", ImageID: "rajjpatel.jpg"},
+	{Name: "TrainwrecksTv", Type: "twitch", ImageID: "trainwreckstv.jpg"},
+	{Name: "GreekGodx", Type: "twitch", ImageID: "greekgodx.jpeg"},
+	{Name: "EsfandTV", Type: "twitch", ImageID: "esfandtv.jpeg"},
+	{Name: "Alecludford", Type: "twitch", ImageID: "alecludford.jpeg"},
 }
 var payload = make(chan Newlive)
 var done = make(chan bool)
@@ -174,17 +177,28 @@ func (s Streamer) getData() {
 			Thumbnail:   thumb,
 			DisplayName: &res.Stream.Channel.DisplayName,
 			IsPlaying:   res.Stream.Game,
+			Mature:      &res.Stream.Channel.Mature,
 			Type:        "twitch",
 		}
 		payload <- result
 	}
 }
+
+var counter int
+
 func Waitme() {
 	waiter.Add(len(streamers))
 	for _, s := range streamers {
 		go s.getData()
 	}
 	waiter.Wait()
+	if counter == 1 {
+		title, name, typ, imageid, viewers := "a title", "a random name", "twitch", "123132", 1337
+		tst := Newlive{Title: &title, Name: &name, Type: typ, ImageID: &imageid, Viewers: &viewers}
+
+		payload <- tst
+	}
+	counter++
 	done <- true
 }
 func Listener() {

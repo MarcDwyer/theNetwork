@@ -23,6 +23,7 @@ export interface LiveStreams {
     thumbnails: Thumbnail;
     displayName: string | null;
     isPlaying: string | null;
+    Mature: boolean | null;
     type: string;
 }
 export interface LSObj {
@@ -33,15 +34,9 @@ interface Thumbnail {
     high: string;
     low: string;
 }
-export interface Details {
-    title: string;
-    name: string;
-    description: string;
-    viewers: number;
-}
 const Main = () => {
     const [live, setLive] = useState<LSObj | null>(null)
-    const [details, setDetails] = useState<Details | null>(null)
+    const [details, setDetails] = useState<LiveStreams | null>(null)
     const [selected, setSelected] = useState<string | null>(null)
 
     const fetchStreams = async () => {
@@ -63,7 +58,7 @@ const Main = () => {
     }
     useEffect(() => {
         fetchStreams()
-        setInterval(fetchStreams, 75000)
+        setInterval(fetchStreams, 10000)
     }, [])
 
     return (

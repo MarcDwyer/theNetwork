@@ -48,7 +48,6 @@ const Notifications = (props: Props): JSX.Element | null => {
     }, []);
     useEffect(() => {
         if (trigger) {
-            setCount(count + 1)
             setTimeout(() => {
                 setTrigger(false)
                 document.title = "The Network"
@@ -60,6 +59,7 @@ const Notifications = (props: Props): JSX.Element | null => {
     }, [trigger])
     useEffect(() => {
         if (props.live && oldProps.current) {
+            setCount(count + 1)
             const oldPrps = Object.values(oldProps.current)
             const newProps = Object.values(props.live)
             const give: Checker[] = difference(newProps, oldPrps)

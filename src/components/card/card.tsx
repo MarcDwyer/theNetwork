@@ -13,16 +13,16 @@ const Card = (props: Props) => {
     const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name, displayName, isPlaying } = props.data
     const newthumb = thumbnails.high.length > 0 ? thumbnails.high : thumbnails.low
     const newTitle = title.slice(0, 24)
-    const image: string = imageId.startsWith("https") ? imageId : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
+    const image: string = imageId.startsWith("https") ? imageId : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}`
     const theme = {
         marginLeft: "15px",
-        isYoutube : type === "youtube" ? true : false
+        isYoutube: type === "youtube" ? true : false
     }
     console.log(theme.isYoutube)
     return (
         <div className="card">
             <Visit
-            theme={theme}
+                theme={theme}
                 target="_blank"
                 rel="noopener noreferrer"
                 href={type === "youtube" ? `https://www.youtube.com/watch?v=${channelId}` : `https://www.twitch.tv/${name}`}
@@ -46,7 +46,7 @@ const Card = (props: Props) => {
             </div>
             <div className="details">
                 <div className="content">
-                    <img src={image} alt="streamer" style={type !== "youtube" ? {border: "3px solid #4B367C"} : {border: "solid 3px red "}}/>
+                    <img src={image} alt="streamer" style={type !== "youtube" ? { border: "3px solid #4B367C" } : { border: "solid 3px red " }} />
                     <div className="content-details">
                         <h3>{newTitle}</h3>
                         <span style={{ margin: '-15px auto 0 auto' }}>{displayName || name} on {type}</span>
@@ -69,21 +69,13 @@ const Card = (props: Props) => {
                             props.setSelected(channelId)
                         }}
                     >Watch</Button>
-                    {description && (
                         <span className="details"
                             onClick={() => {
-                                const info = {
-                                    title,
-                                    description,
-                                    viewers,
-                                    name
-                                }
-                                props.setDetails(info)
+                                props.setDetails(props.data)
                             }}
                         >
-                            Show description
+                            More Details
                     </span>
-                    )}
                 </div>
             </div>
         </div>

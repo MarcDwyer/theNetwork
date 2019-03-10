@@ -28,7 +28,7 @@ const Catalog = () => {
     }, [])
     return (
         <div className="parent">
-            <div className="container cata-container" style={!catalog ? {borderTop: 'none'} : {}}>
+            <div className="container cata-container" style={!catalog ? { borderTop: 'none' } : {}}>
                 {catalog && (
                     <div>
                         <div className="header" style={{ display: 'flex' }}>
@@ -39,7 +39,7 @@ const Catalog = () => {
                         </div>
                         <div className="cata-grid">
                             {catalog.map(({ name, imageId, channelId, type }, index) => {
-                                const image: string = imageId === "hasanabi" || imageId === "richardlewis" ? `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpeg` : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}.jpg`
+                                const image: string = `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}`
 
                                 return (
                                     <div className="cata-card" key={index}>

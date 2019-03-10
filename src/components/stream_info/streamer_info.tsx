@@ -1,14 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Details } from '../main/main'
+import { LiveStreams } from '../main/main'
 import './streamer_info.scss'
 interface Props {
-    details: Details | null;
+    details: LiveStreams | null;
     setDetails: Function;
 }
 const Info = (props: Props) => {
     if (!props.details) return null
-    const { description, title, viewers } = props.details
+    const { description, title, viewers, isPlaying } = props.details
     return ReactDOM.createPortal(
         <div className="parent-modal"
             onClick={(e: any) => {
@@ -18,10 +18,13 @@ const Info = (props: Props) => {
         >
             <div className="child-modal">
                 <div className="content">
-                    <h4>{title}</h4>
+                    <h3>{title}</h3>
+                    {isPlaying && (
+                        <h5>is playing {isPlaying}</h5>
+                    )}
                     <span><small>{viewers} viewers</small></span>
                     <p>
-                        {description.length > 0 ? description : "No description was given"}
+                        {description && description.length > 0 ? description : "No description was given"}
                     </p>
                     <div className="close-div"
                         onClick={() => props.setDetails(null)}
