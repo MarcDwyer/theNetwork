@@ -54,7 +54,7 @@ const Notifications = (props: Props): JSX.Element | null => {
                 if (diff.length > 1) {
                     setDiff([])
                 }
-            }, 5000);
+            }, 9500);
         }
     }, [trigger])
     useEffect(() => {

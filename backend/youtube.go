@@ -68,7 +68,6 @@ type Newlive struct {
 	Type        string     `json:"type"`
 }
 
-// []string{"hasanabi", "destiny", "invadervie", "richardlewisreports", "hitch", "cjayride", "trainwreckstv"}
 var streamers = []Streamer{
 	{Name: "Ice Poseidon", ChannelId: "UCv9Edl_WbtbPeURPtFDo-uA", ImageID: "ice.jpg", Type: "youtube"},
 	{Name: "Hyphonix", ChannelId: "UCaFpm67qMk1W1wJkFhGXucA", ImageID: "hyphonix.jpg", Type: "youtube"},
@@ -82,7 +81,6 @@ var streamers = []Streamer{
 	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix.jpg", Type: "youtube"},
 	{Name: "Hasanabi", Type: "twitch", ImageID: "hasanabi.jpeg"},
 	{Name: "Destiny", Type: "twitch", ImageID: "destiny.jpg"},
-	{Name: "Invadervie", Type: "twitch", ImageID: "invadervie.jpg"},
 	{Name: "Richardlewisreports", Type: "twitch", ImageID: "richardlewis.jpeg"},
 	{Name: "Cjayride", Type: "twitch", ImageID: "cjayride.jpg"},
 	{Name: "Hitch", Type: "twitch", ImageID: "hitch.jpg"},
@@ -91,6 +89,8 @@ var streamers = []Streamer{
 	{Name: "GreekGodx", Type: "twitch", ImageID: "greekgodx.jpeg"},
 	{Name: "EsfandTV", Type: "twitch", ImageID: "esfandtv.jpeg"},
 	{Name: "Alecludford", Type: "twitch", ImageID: "alecludford.jpeg"},
+	{Name: "Knightsinclair", Type: "twitch", ImageID: "knightsinclair.jpg"},
+	{Name: "Dkane", Type: "twitch", ImageID: "dkane.png "},
 }
 var payload = make(chan Newlive)
 var done = make(chan bool)
