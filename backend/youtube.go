@@ -91,6 +91,7 @@ var streamers = []Streamer{
 	{Name: "Alecludford", Type: "twitch", ImageID: "alecludford.jpeg"},
 	{Name: "Knightsinclair", Type: "twitch", ImageID: "knightsinclair.jpg"},
 	{Name: "Dkane", Type: "twitch", ImageID: "dkane.png "},
+	{Name: "Hyphonix", Type: "twitch", ImageID: "hyphonixtwitch.jpeg"},
 }
 var payload = make(chan Newlive)
 var done = make(chan bool)
@@ -100,6 +101,7 @@ var waiter sync.WaitGroup
 func (s Streamer) getData() {
 	defer waiter.Done()
 	if s.Type == "youtube" {
+		return
 		url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", s.ChannelId, os.Getenv("KEY"))
 		resp, err := http.Get(url)
 		if err != nil || resp.StatusCode != 200 {

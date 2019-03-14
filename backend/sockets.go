@@ -9,6 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
+
 	websocket "github.com/gorilla/websocket"
 )
 
@@ -19,9 +21,8 @@ type Client struct {
 	conn *websocket.Conn
 
 	// Buffered channel of outbound messages.
-	send  chan []byte
-	id    string
-	reqid []byte
+	send chan []byte
+	id   uuid.UUID
 }
 
 type Counter struct {
@@ -75,22 +76,33 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		c.reqid = message
 
-		//	count, _ := json.Marshal(len(c.hub.clients))
-		//	c.hub.broadcast <- count
 		c.hub.broadcast <- message
 	}
 }
+
+type Address struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 func (c *Client) sendCount() {
 	if c.hub.clients == nil {
 		return
 	}
-	ch := Counter{
-		Total: len(c.hub.clients),
+
+	keys := []Address{}
+	for v := range c.hub.clients {
+		id := v.String()
+		addr := Address{
+			Id:   id,
+			Name: "balls",
+		}
+		keys = append(keys, addr)
 	}
-	count, _ := json.Marshal(ch)
-	c.hub.broadcast <- count
+	rz, _ := json.Marshal(keys)
+	c.hub.broadcast <- rz
+
 }
 
 // writePump pumps messages from the hub to the websocket connection.
@@ -125,7 +137,6 @@ func (c *Client) writePump() {
 				w.Write(newline)
 				w.Write(<-c.send)
 			}
-
 			if err := w.Close(); err != nil {
 				return
 			}
@@ -145,8 +156,7 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
-	fmt.Println(client)
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), id: uuid.New()}
 	wg.Add(1)
 	client.hub.register <- client
 	wg.Wait()

@@ -26,7 +26,7 @@ class Chat extends Component<{}, State> {
         name: '',
         count: null,
         error: null,
-        ws: new WebSocket(`wss://${document.location.host}/sockets/`)
+        ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`)
     }
     componentDidMount() {
         const { ws } = this.state
@@ -44,15 +44,16 @@ class Chat extends Component<{}, State> {
     }
     getMessages = (msg: any) => {
         const { chat } = this.state
+        console.log(msg)
         const data = JSON.parse(msg.data)
-        console.log(data)
-        if (data.total) {
+        if (Array.isArray(data)) {
             this.setState((prevState) => {
                 console.log(prevState)
-                return { count: data.total }
+                return { count: data.length }
             })
             return
         }
+        console.log(data)
         this.setState({ chat: [...chat, JSON.parse(msg.data)] })
     }
     setErr = (err: string) => {
@@ -114,7 +115,12 @@ class Chat extends Component<{}, State> {
                                     e.preventDefault()
                                     try {
                                         if (message.length === 0) throw "Message cannot be empty"
-                                        ws.send(JSON.stringify({ message: message, name: name }))
+                                        const obj = {
+                                            message,
+                                            name
+                                        }
+                                        console.log(obj)
+                                        ws.send(JSON.stringify(obj))
                                         this.setState({ message: '' })
                                     } catch (err) {
                                         this.setErr(err)
