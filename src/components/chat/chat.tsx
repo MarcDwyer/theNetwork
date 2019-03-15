@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import './chat_styles.scss'
-
+interface User {
+    id: string;
+    name: string;
+    type: string;
+}
 interface State {
     chat: Array<string>;
     message: string;
     ws: WebSocket;
     isAuth: boolean;
     open: boolean;
-    count: number | null;
+    users: User[] | null;
     name: string;
     error: string | null;
 }
@@ -24,7 +28,7 @@ class Chat extends Component<{}, State> {
         open: false,
         isAuth: false,
         name: '',
-        count: null,
+        users: null,
         error: null,
         ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`)
     }
@@ -44,17 +48,13 @@ class Chat extends Component<{}, State> {
     }
     getMessages = (msg: any) => {
         const { chat } = this.state
-        console.log(msg)
         const data = JSON.parse(msg.data)
-        if (Array.isArray(data)) {
-            this.setState((prevState) => {
-                console.log(prevState)
-                return { count: data.length }
-            })
-            return
-        }
         console.log(data)
-        this.setState({ chat: [...chat, JSON.parse(msg.data)] })
+        if (Array.isArray(data)) {
+            this.setState({users: data})
+        } else {
+            this.setState({chat: [...chat, data]})
+        }
     }
     setErr = (err: string) => {
         this.setState({ error: err }, () => {
@@ -62,7 +62,7 @@ class Chat extends Component<{}, State> {
         })
     }
     render() {
-        const { chat, message, ws, open, name, isAuth, count, error } = this.state
+        const { chat, message, ws, open, name, isAuth, users, error } = this.state
         return (
             <div className={`top-chat ${open ? "open" : ""}`}>
                 <div className="nav-buttons"
@@ -71,7 +71,7 @@ class Chat extends Component<{}, State> {
                     {open ? <i className="fas fa-minus" /> : <i className="fas fa-plus" />}
                     <span>Chat</span>
                     <div className="online">
-                        <span>{count} online</span>
+                        <span>{users ? `${users.length} online` : ""}</span>
                     </div>
                 </div>
                 {open && !isAuth && (
@@ -117,9 +117,9 @@ class Chat extends Component<{}, State> {
                                         if (message.length === 0) throw "Message cannot be empty"
                                         const obj = {
                                             message,
-                                            name
+                                            name,
+                                            type: "message"
                                         }
-                                        console.log(obj)
                                         ws.send(JSON.stringify(obj))
                                         this.setState({ message: '' })
                                     } catch (err) {

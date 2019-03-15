@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
-import Chat from './components/chat/chat'
 import Main from './components/main/main'
 import Navbar from './components/nav/navbar'
 
@@ -10,7 +9,6 @@ ReactDOM.render(
 <div className="padre">
 <Navbar />
 <Main />
-<Chat />
 </div>
 , document.getElementById('root'));
 

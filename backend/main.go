@@ -54,7 +54,7 @@ func main() {
 	go Listener()
 	go Waitme()
 	go func() {
-		pollInterval := 10
+		pollInterval := 5
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 		for range timerCh {
@@ -67,7 +67,8 @@ func main() {
 	http.HandleFunc("/streamers/all", getCatalog)
 	http.HandleFunc("/streamers/live", sendStuff)
 	http.HandleFunc("/sockets/", func(w http.ResponseWriter, r *http.Request) {
-		SocketMe(hub, w, r)
+		return
+		//	SocketMe(hub, w, r)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))

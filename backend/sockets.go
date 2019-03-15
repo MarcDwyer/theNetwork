@@ -84,6 +84,7 @@ func (c *Client) readPump() {
 type Address struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 func (c *Client) sendCount() {
@@ -97,6 +98,7 @@ func (c *Client) sendCount() {
 		addr := Address{
 			Id:   id,
 			Name: "balls",
+			Type: "users",
 		}
 		keys = append(keys, addr)
 	}
@@ -159,10 +161,10 @@ func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), id: uuid.New()}
 	wg.Add(1)
 	client.hub.register <- client
+	go client.writePump()
+	go client.readPump()
 	wg.Wait()
 	client.sendCount()
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.writePump()
-	go client.readPump()
 }
