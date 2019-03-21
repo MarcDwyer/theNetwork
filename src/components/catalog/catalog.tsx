@@ -9,7 +9,7 @@ interface Stream {
 }
 
 
-const Catalog = () => {
+const Catalog = React.memo(() => {
     const [catalog, setCatalog] = useState<Stream[] | null>(null)
     const [fail, setFail] = useState<string | null>(null)
     const getCatalog = async () => {
@@ -58,6 +58,6 @@ const Catalog = () => {
             </div>
         </div>
     )
-}
+})
 
 export default Catalog

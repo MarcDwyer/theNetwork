@@ -8,8 +8,7 @@ interface Props {
     live: LSObj | null;
     setSelected: Function;
 }
-// https://player.twitch.tv/
-const VideoPlayer = (props: Props) => {
+const VideoPlayer = React.memo((props: Props) => {
     const [minimize, setMinimize] = useState<boolean>(false)
 
     const oldProps = useRef(props.selected)
@@ -86,6 +85,6 @@ const VideoPlayer = (props: Props) => {
             })()}
         </div>
     )
-}
+})
 
 export default VideoPlayer

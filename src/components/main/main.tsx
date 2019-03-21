@@ -34,7 +34,7 @@ interface Thumbnail {
     high: string;
     low: string;
 }
-const Main = () => {
+const Main = React.memo(() => {
     const [live, setLive] = useState<LSObj | null>(null)
     const [details, setDetails] = useState<LiveStreams | null>(null)
     const [selected, setSelected] = useState<string | null>(null)
@@ -44,7 +44,6 @@ const Main = () => {
             const fetcher = await fetch('/streamers/live')
             const data: LiveStreams[] = await fetcher.json()
             if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-          //  const sorted = data.sort((a, b) => a.viewers < b.viewers ? 1 : -1)
             const newdata = data.reduce((obj: LSObj, item) => {
                 obj[item.channelId] = item
                 return obj
@@ -107,6 +106,6 @@ const Main = () => {
             <Footer />
         </div>
     )
-}
+})
 
 export default Main

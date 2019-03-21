@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import './chat_styles.scss'
 interface User {
     id: string;
@@ -15,7 +15,7 @@ interface State {
     name: string;
     error: string | null;
 }
-class Chat extends Component<{}, State> {
+class Chat extends PureComponent<{}, State> {
     private chatRef: React.RefObject<HTMLInputElement> | null;
 
     constructor(props: any) {
