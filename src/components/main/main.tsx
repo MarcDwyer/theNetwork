@@ -48,7 +48,7 @@ export interface Stream {
 }
 class Main extends Component<{}, State> {
     state = {
-        ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`),
+        ws: new WebSocket(`wss://${document.location.host}/sockets/`),
         selected: null,
         catalog: null,
         details: null,
