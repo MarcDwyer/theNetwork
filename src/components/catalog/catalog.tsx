@@ -1,31 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { Stream } from '../main/main'
 import './catalog_styles.scss'
 
-interface Stream {
-    name: string;
-    channelId: string;
-    imageId: string;
-    type: string;
+interface Props {
+    catalog: Stream[];
 }
-
-
-const Catalog = React.memo(() => {
-    const [catalog, setCatalog] = useState<Stream[] | null>(null)
-    const [fail, setFail] = useState<string | null>(null)
-    const getCatalog = async () => {
-        try {
-            const fetchCata = await fetch('/streamers/all')
-            const data: Stream[] | null = await fetchCata.json()
-            if (!data) throw "Catalog Fetching failed"
-            setCatalog(data)
-        } catch (err) {
-            setFail(err)
-        }
-    }
-
-    useEffect(() => {
-        getCatalog()
-    }, [])
+const Catalog = (props: Props) => {
+    const { catalog } = props
     return (
         <div className="parent">
             <div className="container cata-container" style={!catalog ? { borderTop: 'none' } : {}}>
@@ -58,6 +39,6 @@ const Catalog = React.memo(() => {
             </div>
         </div>
     )
-})
+}
 
 export default Catalog

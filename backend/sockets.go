@@ -6,10 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
 	"time"
-
-	"github.com/google/uuid"
 
 	websocket "github.com/gorilla/websocket"
 )
@@ -22,11 +19,6 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
-	id   uuid.UUID
-}
-
-type Counter struct {
-	Total int `json:"total"`
 }
 
 const (
@@ -54,14 +46,10 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-var wg2 sync.WaitGroup
 
 func (c *Client) readPump() {
 	defer func() {
-		wg2.Add(1)
 		c.hub.unregister <- c
-		wg2.Wait()
-		c.sendCount()
 		c.conn.Close()
 	}()
 	c.conn.SetReadLimit(maxMessageSize)
@@ -81,37 +69,6 @@ func (c *Client) readPump() {
 	}
 }
 
-type Address struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
-
-func (c *Client) sendCount() {
-	if c.hub.clients == nil {
-		return
-	}
-
-	keys := []Address{}
-	for v := range c.hub.clients {
-		id := v.String()
-		addr := Address{
-			Id:   id,
-			Name: "balls",
-			Type: "users",
-		}
-		keys = append(keys, addr)
-	}
-	rz, _ := json.Marshal(keys)
-	c.hub.broadcast <- rz
-
-}
-
-// writePump pumps messages from the hub to the websocket connection.
-//
-// A goroutine running writePump is started for each connection. The
-// application ensures that there is at most one writer to a connection by
-// executing all writes from this goroutine.
 func (c *Client) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -123,7 +80,6 @@ func (c *Client) writePump() {
 		case message, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
-				// The hub closed the channel.
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
@@ -133,12 +89,6 @@ func (c *Client) writePump() {
 			}
 			w.Write(message)
 
-			// Add queued chat messages to the current websocket message.
-			n := len(c.send)
-			for i := 0; i < n; i++ {
-				w.Write(newline)
-				w.Write(<-c.send)
-			}
 			if err := w.Close(); err != nil {
 				return
 			}
@@ -151,20 +101,19 @@ func (c *Client) writePump() {
 	}
 }
 
-var wg3 sync.WaitGroup
-
 func SocketMe(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), id: uuid.New()}
-	wg.Add(1)
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
 	go client.writePump()
 	go client.readPump()
-	wg.Wait()
-	client.sendCount()
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
+	go func() {
+		results, _ := json.Marshal(Results)
+		catalog, _ := json.Marshal(streamers)
+		client.send <- results
+		client.send <- catalog
+	}()
 }

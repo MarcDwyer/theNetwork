@@ -79,7 +79,6 @@ var streamers = []Streamer{
 	{Name: "Coding Train", ChannelId: "UCvjgXvBlbQiydffZU7m1_aw", ImageID: "coding.jpg", Type: "youtube"},
 	{Name: "Joe Rogan Podcast", ChannelId: "UCzQUP1qoWDoEbmsQxvdjxgQ", ImageID: "joe.jpg", Type: "youtube"},
 	{Name: "Mixhound", ChannelId: "UC_jxnWLGJ2eQK4en3UblKEw", ImageID: "mix.jpg", Type: "youtube"},
-	{Name: "Hasanabi", Type: "twitch", ImageID: "hasanabi.jpeg"},
 	{Name: "Destiny", Type: "twitch", ImageID: "destiny.jpg"},
 	{Name: "Richardlewisreports", Type: "twitch", ImageID: "richardlewis.jpeg"},
 	{Name: "Cjayride", Type: "twitch", ImageID: "cjayride.jpg"},
@@ -92,16 +91,41 @@ var streamers = []Streamer{
 	{Name: "Knightsinclair", Type: "twitch", ImageID: "knightsinclair.jpg"},
 	{Name: "Dkane", Type: "twitch", ImageID: "dkane.png "},
 	{Name: "Hyphonix", Type: "twitch", ImageID: "hyphonixtwitch.jpeg"},
+	{Name: "staysafetv", Type: "twitch", ImageID: "staysafetv.jpeg"},
 }
-var payload = make(chan Newlive)
-var done = make(chan bool)
 
 var waiter sync.WaitGroup
 
+var ch = make(chan Newlive)
+var isDone = make(chan bool)
+
+func getStreamData() {
+	waiter.Add(len(streamers))
+	for _, s := range streamers {
+		go s.getData()
+	}
+	waiter.Wait()
+	fmt.Println("waiter done")
+	isDone <- true
+}
+func Listener(h *Hub) {
+	payload := []Newlive{}
+	for {
+		select {
+		case data := <-ch:
+			payload = append(payload, data)
+		case <-isDone:
+			sort.Sort(ByViewers(payload))
+			Results = payload
+			payload = nil
+			rz, _ := json.Marshal(Results)
+			h.broadcast <- rz
+		}
+	}
+}
 func (s Streamer) getData() {
 	defer waiter.Done()
 	if s.Type == "youtube" {
-		return
 		url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=%v&eventType=live&type=video&key=%v", s.ChannelId, os.Getenv("KEY"))
 		resp, err := http.Get(url)
 		if err != nil || resp.StatusCode != 200 {
@@ -158,7 +182,7 @@ func (s Streamer) getData() {
 			Thumbnail:   thumb,
 			Type:        "youtube",
 		}
-		payload <- rz
+		ch <- rz
 	} else if s.Type == "twitch" {
 		url := fmt.Sprintf("https://api.twitch.tv/kraken/streams/%v?client_id=%v", s.Name, os.Getenv("TWITCH"))
 		rz, err := http.Get(url)
@@ -186,40 +210,6 @@ func (s Streamer) getData() {
 			Mature:      &res.Stream.Channel.Mature,
 			Type:        "twitch",
 		}
-		payload <- result
-	}
-}
-
-var counter int
-
-func Waitme() {
-	waiter.Add(len(streamers))
-	for _, s := range streamers {
-		go s.getData()
-	}
-	waiter.Wait()
-	if counter == 1 {
-		title, name, typ, imageid, viewers := "a title", "a random name", "twitch", "123132", 1337
-		tst := Newlive{Title: &title, Name: &name, Type: typ, ImageID: &imageid, Viewers: &viewers}
-
-		payload <- tst
-	}
-	counter++
-	done <- true
-}
-func Listener() {
-	final := []Newlive{}
-	for {
-		select {
-		case request := <-payload:
-			final = append(final, request)
-		case isDone := <-done:
-			if isDone {
-				fmt.Println("done ran")
-				Results = final
-				sort.Sort(ByViewers(Results))
-				final = nil
-			}
-		}
+		ch <- result
 	}
 }

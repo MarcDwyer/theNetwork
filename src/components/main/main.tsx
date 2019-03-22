@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
 import VideoPlayer from '../videoplayer/video'
 import Featured from '../featured/featured'
 import Footer from '../footer/footer'
@@ -6,7 +6,6 @@ import Notifications from '../notifications/notif'
 import Catalog from '../catalog/catalog'
 import Info from '../stream_info/streamer_info'
 import Card from '../card/card'
-import uuid from 'uuid'
 import { PacmanLoader } from 'react-spinners';
 import './main_styles.scss'
 
@@ -34,78 +33,106 @@ interface Thumbnail {
     high: string;
     low: string;
 }
-const Main = React.memo(() => {
-    const [live, setLive] = useState<LSObj | null>(null)
-    const [details, setDetails] = useState<LiveStreams | null>(null)
-    const [selected, setSelected] = useState<string | null>(null)
-
-    const fetchStreams = async () => {
-        try {
-            const fetcher = await fetch('/streamers/live')
-            const data: LiveStreams[] = await fetcher.json()
-            if (!data || data.length === 0) throw "No streamers online... I'm searching!"
-            const newdata = data.reduce((obj: LSObj, item) => {
-                obj[item.channelId] = item
-                return obj
-            }, {})
-            setLive(newdata)
-        } catch (er) {
-            console.log(er)
-            if (live) setLive(null)
-        }
+interface State {
+    ws: WebSocket;
+    live: LSObj | null;
+    catalog: Stream[] | null;
+    details: LiveStreams | null;
+    selected: string;
+}
+export interface Stream {
+    name: string;
+    channelId: string;
+    imageId: string;
+    type: string;
+}
+class Main extends Component<{}, State> {
+    state = {
+        ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/`),
+        selected: null,
+        catalog: null,
+        details: null,
+        live: null
     }
-    useEffect(() => {
-        fetchStreams()
-        setInterval(fetchStreams, 10000)
-    }, [])
+    componentDidMount() {
+        const { ws } = this.state
 
-    return (
-        <div className="parent main-parent">
-            <div className="container main-container">
-                {!live && (
-                    <div className="offlineCard">
-                        <h2>No Streamers online... I'm searching!</h2>
-                        <div className="loader">
-                            <PacmanLoader
-                                sizeUnit={"px"}
-                                size={25}
-                                color={'#123abc'}
+        ws.addEventListener('message', (msg) => {
+            const payload = JSON.parse(msg.data)
+            console.log(payload)
+            if (payload.length === 0) return
+            console.log("server sent data")
+            if (payload[0].videoId) {
+                const newobj = payload.reduce((obj, item: LiveStreams) => {
+                    obj[item.channelId] = item
+                    return obj
+                }, {})
+                this.setState({live: newobj})
+            } else {
+                this.setState({catalog: payload})
+            }
 
-                            />
-                        </div>
-                    </div>
-                )}
-                {live && (
-                    <div>
-                        <Featured live={live} selected={selected} setSelect={setSelected} />
-                        <div className="header" style={{ display: 'flex' }}>
-                            <h2>Active Streams </h2>
-                            <div className="stream-count" style={{ margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex' }}>
-                                <span style={{ margin: 'auto' }}>{Object.values(live).length}</span>
+        })
+    }
+    setSelected = (str: string) => {
+        this.setState({selected: str})
+    }
+    setDetails = (stream: LiveStreams) => {
+        this.setState({details: stream})
+    }
+    render() {
+        const { live, ws, selected } = this.state
+        return (
+            <div className="parent main-parent">
+                <div className="container main-container">
+                    {!live && (
+                        <div className="offlineCard">
+                            <h2>No Streamers online... I'm searching!</h2>
+                            <div className="loader">
+                                <PacmanLoader
+                                    sizeUnit={"px"}
+                                    size={25}
+                                    color={'#123abc'}
+
+                                />
                             </div>
                         </div>
-                        <div className="active-cards">
-                            {Object.values(live).map((item) => {
-                                return (
-                                    <Card
-                                        key={uuid()}
-                                        data={item}
-                                        setDetails={setDetails}
-                                        setSelected={setSelected}
-                                    />
-                                )
-                            })}
+                    )}
+                    {live && (
+                        <div>
+                            <Featured live={live} selected={selected} setSelect={this.setSelected} />
+                            <div className="header" style={{ display: 'flex' }}>
+                                <h2>Active Streams </h2>
+                                <div className="stream-count" style={{ margin: 'auto auto auto 10px', backgroundColor: '#BE8AC7', borderRadius: '50%', width: '30px', height: '30px', display: 'flex' }}>
+                                    <span style={{ margin: 'auto' }}>{Object.values(live).length}</span>
+                                </div>
+                            </div>
+                            <div className="active-cards">
+                                {Object.values(live).map((item: LiveStreams) => {
+                                    return (
+                                        <Card
+                                        key={item.videoId} 
+                                        streamerData={item}
+                                        setDetails={this.setDetails}
+                                        setSelected={this.setSelected}
+                                        />
+                                    )
+                                })}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
+                <Catalog catalog={this.state.catalog} />
+                <VideoPlayer selected={selected} live={live} setSelected={this.setSelected} />
+                <Notifications live={live} setSelected={this.setSelected} />
+                <Info 
+                details={this.state.details}
+                setDetails={this.setDetails}
+                />
+                <Footer />
             </div>
-            <VideoPlayer selected={selected} live={live} setSelected={setSelected} />
-            <Info details={details} setDetails={setDetails} />
-            <Notifications live={live} setSelected={setSelected} />
-            <Catalog />
-            <Footer />
-        </div>
-    )
-})
+        )
+    }
+}
 
 export default Main

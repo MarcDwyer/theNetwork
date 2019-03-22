@@ -1,12 +1,8 @@
 package main
 
-import (
-	"github.com/google/uuid"
-)
-
 type Hub struct {
 	// Registered clients.
-	clients map[uuid.UUID]*Client
+	clients map[*Client]bool
 
 	// Inbound messages from the clients.
 	broadcast chan []byte
@@ -23,7 +19,7 @@ func newHub() *Hub {
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
-		clients:    make(map[uuid.UUID]*Client),
+		clients:    make(map[*Client]bool),
 	}
 }
 
@@ -31,20 +27,18 @@ func (h *Hub) run() {
 	for {
 		select {
 		case client := <-h.register:
-			h.clients[client.id] = client
-			wg.Done()
+			h.clients[client] = true
 		case client := <-h.unregister:
-			if _, ok := h.clients[client.id]; ok {
-				delete(h.clients, client.id)
+			if _, ok := h.clients[client]; ok {
+				delete(h.clients, client)
 				close(client.send)
-				wg2.Done()
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
 				select {
-				case h.clients[client].send <- message:
+				case client.send <- message:
 				default:
-					close(h.clients[client].send)
+					close(client.send)
 					delete(h.clients, client)
 				}
 			}

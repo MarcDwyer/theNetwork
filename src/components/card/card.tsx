@@ -4,13 +4,13 @@ import { Button } from '../styled_comp/styles'
 import { Visit, VisitSpan } from './card_styles'
 
 interface Props {
-    data: LiveStreams;
+    streamerData: LiveStreams;
     setSelected: Function;
     setDetails: Function;
 
 }
 const Card = (props: Props) => {
-    const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name, displayName, isPlaying } = props.data
+    const { thumbnails, likes, dislikes, viewers, title, channelId, description, imageId, videoId, type, name, displayName, isPlaying } = props.streamerData
     const newTitle = title.slice(0, 24)
     const image: string = imageId.startsWith("https") ? imageId : `https://s3.us-east-2.amazonaws.com/xhnetwork/${imageId}`
     const theme = {
@@ -69,7 +69,7 @@ const Card = (props: Props) => {
                     >Watch</Button>
                         <span className="details"
                             onClick={() => {
-                                props.setDetails(props.data)
+                                props.setDetails(props.streamerData)
                             }}
                         >
                             More Details

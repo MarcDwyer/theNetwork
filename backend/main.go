@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"runtime"
@@ -12,32 +10,11 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	fisheryates "github.com/matttproud/fisheryates"
 )
 
 var Results []Newlive
 var wg sync.WaitGroup
 var mykey string
-
-func getCatalog(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	rnd := rand.New(rand.NewSource(4))
-	fisheryates.Shuffle(Random(streamers), rnd.Intn)
-	b, err := json.Marshal(streamers)
-	if err != nil {
-		fmt.Println(err)
-	}
-	w.Write(b)
-}
-
-func sendStuff(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	b, err := json.Marshal(Results)
-	if err != nil {
-		fmt.Println(err)
-	}
-	w.Write(b)
-}
 
 func init() {
 	fmt.Println(runtime.NumCPU())
@@ -51,24 +28,20 @@ func init() {
 
 func main() {
 	fmt.Println("Server Started...")
-	go Listener()
-	go Waitme()
+	hub := newHub()
+	go hub.run()
+	go Listener(hub)
+	go getStreamData()
 	go func() {
-		pollInterval := 5
+		pollInterval := 4
 
 		timerCh := time.Tick(time.Duration(pollInterval) * time.Minute)
 		for range timerCh {
-			go Waitme()
+			go getStreamData()
 		}
 	}()
-	hub := newHub()
-	go hub.run()
-
-	http.HandleFunc("/streamers/all", getCatalog)
-	http.HandleFunc("/streamers/live", sendStuff)
 	http.HandleFunc("/sockets/", func(w http.ResponseWriter, r *http.Request) {
-		return
-		//	SocketMe(hub, w, r)
+		SocketMe(hub, w, r)
 	})
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
